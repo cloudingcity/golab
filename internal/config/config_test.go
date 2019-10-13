@@ -70,3 +70,19 @@ func TestConfigure(t *testing.T) {
 		assert.Equal(t, Get("token"), "faketoken")
 	})
 }
+
+func TestList(t *testing.T) {
+	Load(testPath)
+
+	buffer := &bytes.Buffer{}
+	List(buffer)
+
+	want := `  NAME           VALUE          
+ ------- ---------------------- 
+  host    https://abc.com       
+  token   NjEaWdDcARhzYKdx4fA4  
+`
+	got := buffer.String()
+
+	assert.Equal(t, want, got)
+}

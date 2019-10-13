@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/viper"
 )
 
@@ -68,4 +69,19 @@ func readToken(w io.Writer, reader *bufio.Reader) string {
 	token, _ := reader.ReadString('\n')
 
 	return strings.TrimSpace(token)
+}
+
+// List show config content
+func List(w io.Writer) {
+	rows := [][]string{
+		{"host", Get("host")},
+		{"token", Get("token")},
+	}
+	table := tablewriter.NewWriter(w)
+	table.SetHeader([]string{"Name", "Value"})
+	table.SetBorder(false)
+	table.SetCenterSeparator(" ")
+	table.SetColumnSeparator(" ")
+	table.AppendBulk(rows)
+	table.Render()
 }
