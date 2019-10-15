@@ -15,6 +15,7 @@ var rootCmd = &cobra.Command{
 	Use:   "golab",
 	Short: "A CLI tool for gitlab",
 }
+var configured bool
 
 // Execute adds all child commands to the root command and sets flags appropriately
 func Execute() {
@@ -41,5 +42,7 @@ func initConfig() {
 		if err := config.Load(configPath); err != nil {
 			log.Fatal(err)
 		}
+
+		configured = true
 	}
 }

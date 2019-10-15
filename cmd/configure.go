@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/cloudingcity/golab/internal/config"
@@ -12,7 +13,13 @@ var configureCmd = &cobra.Command{
 	Use:   "configure",
 	Short: "Configure golab CLI options",
 	Run: func(cmd *cobra.Command, args []string) {
-		config.Configure(os.Stdin, os.Stdout)
+		if configured {
+			return
+		}
+
+		if err := config.Configure(os.Stdin, os.Stdout); err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
