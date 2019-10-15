@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -47,6 +48,7 @@ func Configure(r io.Reader, w io.Writer) error {
 		v.Set("token", token)
 	}
 
+	os.MkdirAll(configPath, os.ModePerm)
 	filePath := filepath.Join(configPath, "golab.yaml")
 	if err := v.WriteConfigAs(filePath); err != nil {
 		return err
