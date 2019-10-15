@@ -32,14 +32,14 @@ func init() {
 // initConfig reads in config file
 func initConfig() {
 	home, _ := os.UserHomeDir()
-	configPath := filepath.Join(home, ".config")
+	path := filepath.Join(home, ".config")
 
-	if err := config.Load(configPath); err != nil {
+	if err := config.Load(path); err != nil {
 		if err := config.Configure(os.Stdin, os.Stdout); err != nil {
 			log.Fatal(err)
 		}
 
-		if err := config.Load(configPath); err != nil {
+		if err := config.Load(path); err != nil {
 			log.Fatal(err)
 		}
 
