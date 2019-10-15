@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/cloudingcity/golab/internal/config"
 	"github.com/spf13/cobra"
@@ -32,7 +32,7 @@ func init() {
 // initConfig reads in config file
 func initConfig() {
 	home, _ := os.UserHomeDir()
-	configPath := path.Join(home, ".config")
+	configPath := filepath.Join(home, ".config")
 
 	if err := config.Load(configPath); err != nil {
 		if err := config.Configure(os.Stdin, os.Stdout); err != nil {

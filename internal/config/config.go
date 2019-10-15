@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
@@ -47,7 +47,7 @@ func Configure(r io.Reader, w io.Writer) error {
 		v.Set("token", token)
 	}
 
-	filePath := path.Join(configPath, "golab.yaml")
+	filePath := filepath.Join(configPath, "golab.yaml")
 	if err := v.WriteConfigAs(filePath); err != nil {
 		return err
 	}
