@@ -1,0 +1,23 @@
+language: go
+
+sudo: false
+
+env:
+  - GO111MODULE=on
+
+go:
+  - 1.12.x
+  - 1.13.x
+
+script:
+  - make fmt
+  - make vet
+  - make test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email: false
+  slack:
+    secure: "XcM7UlxamI0F0S/DHDevhosSDvi5bpkshkP3HdZ/Sh4FWCP3cAfLiBnu9QCD2lMgUz3rV+wS+RTItD8Rhy0FfeF/+Ggwhs9B7S0bQMHcHvZUasF0Hmd8VsEMz+cA5SlAhal4DNCyiecHcOvBMppnLyBAmoHf6OfVcY272oU0skOD4qIjX2rgG4DEg05vXTyW9sNA9cRBxBP/OkcUz/FVVPqrmbvmbOv8TgeWQbMzn9gS9rBCoQ1sBfYM8Soq+Bxttkj0h1lWL3qBqiw47xdQoUXATk5uUBWxQwr9lGrtRauuvcWRuiIJ686iEoOZl0xvl74XYBwmRgX5BbQNXg7sWtW0zZNrRHh6zsh4LbweuTb9OUXMoSBZVmQS/jm/hP799VVKLL5CW0oWsdiKSOUzERYkKxx1iPNAeYeR8skzsi3hizYk4S/34z3KrMTJb6NSGMsZrx5Qb8J9ryNnVKooXG2iRgH0sbabZUWB6VZNZfm+SZf5yOjTIRRP2iurcvFMoBk7FTwhqilhEbycdZ22AgqAYLcePYfCCqGSsOXzItOEWh+zxcAIr3eUhG7H6Vl8vSjT74EoGABroRB7V0fVZXA9LgYLYb7flhuv7IlTkDlDbQwl7X1VXspDeLJQEXkRmEbQcECkSZZ9tUxCHTPCSlCo82YVyMkQ2w2typBL96w="
