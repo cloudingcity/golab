@@ -15,7 +15,7 @@ const (
 	fakePath = "/foo/bar/baz"
 )
 
-func TestGet(t *testing.T) {
+func TestLoad(t *testing.T) {
 	t.Run("load success", func(t *testing.T) {
 		err := Load(testPath)
 
