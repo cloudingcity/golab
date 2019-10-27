@@ -1,3 +1,6 @@
+.PHONY: all
+all: lint vet test
+
 .PHONY: fmt
 fmt:
 	@hash goimports > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
