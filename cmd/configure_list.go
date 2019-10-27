@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// configureListCmd represents the configureList command
 var configureListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all configuration",

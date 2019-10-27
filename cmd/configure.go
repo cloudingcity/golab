@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// configureCmd represents the configure command
 var configureCmd = &cobra.Command{
 	Use:   "configure",
 	Short: "Configure golab CLI options",
