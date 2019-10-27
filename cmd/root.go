@@ -25,6 +25,7 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
 	cobra.OnInitialize(initConfig)
 }
 
