@@ -4,85 +4,98 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	testPath = "../../test"
-	fakePath = "/foo/bar/baz"
-)
+func TestNew(t *testing.T) {
+	t.Run("get correct default value", func(t *testing.T) {
+		c := New()
+
+		assert.Equal(t, c.Get("host"), "https://gitlab.com")
+		assert.Equal(t, c.Get("token"), "None")
+	})
+}
 
 func TestLoad(t *testing.T) {
 	t.Run("load success", func(t *testing.T) {
-		err := Load(testPath)
+		c := New()
+		err := c.Load(getTestPath())
 
 		assert.NoError(t, err)
-		assert.Equal(t, Get("host"), "https://abc.com")
-		assert.Equal(t, Get("token"), "NjEaWdDcARhzYKdx4fA4")
+		assert.Equal(t, c.Get("host"), "https://abc.com")
+		assert.Equal(t, c.Get("token"), "NjEaWdDcARhzYKdx4fA4")
 	})
 
 	t.Run("load fail", func(t *testing.T) {
-		err := Load(fakePath)
+		c := New()
+
+		fakePath := "/foo/bar/baz"
+		err := c.Load(fakePath)
 
 		assert.Error(t, err)
-		assert.Equal(t, Get("host"), "https://gitlab.com")
-		assert.Equal(t, Get("token"), "None")
 	})
 }
 
 func TestConfigure(t *testing.T) {
-	t.Run("skip all", func(t *testing.T) {
-		Load(testPath)
-
-		stdin := bytes.NewBufferString("\n\n")
-		stdout := &bytes.Buffer{}
-		Configure(stdin, stdout)
-
-		filePath := filepath.Join(testPath, "golab.yaml")
-		want := "Gitlab Host [https://abc.com]: Gitlab Token (scope: api) [NjEaWdDcARhzYKdx4fA4]: \nConfig saved to " + filePath + "\n"
-		got := stdout.String()
-
-		assert.Equal(t, want, got)
-	})
-
-	t.Run("enter something", func(t *testing.T) {
+	t.Run("skip all input and get default value", func(t *testing.T) {
 		dir, _ := ioutil.TempDir("", "golab")
 		defer os.RemoveAll(dir)
 
-		Load(dir)
-		stdin := bytes.NewBufferString("https://foo.com\nfaketoken\n")
-		stdout := &bytes.Buffer{}
-		Configure(stdin, stdout)
+		c := New()
 
-		filePath := filepath.Join(dir, "golab.yaml")
-		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + filePath + "\n"
-		got := stdout.String()
+		in := bytes.NewBufferString("\n\n")
+		out := &bytes.Buffer{}
+		c.Configure(dir, in, out)
+
+		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
+		got := out.String()
 
 		assert.Equal(t, want, got)
-		assert.FileExists(t, filePath)
+		assert.FileExists(t, c.viper.ConfigFileUsed())
+		assert.Equal(t, c.Get("host"), "https://gitlab.com")
+		assert.Equal(t, c.Get("token"), "None")
+	})
 
-		Load(dir)
+	t.Run("enter something and get enter value", func(t *testing.T) {
+		dir, _ := ioutil.TempDir("", "golab")
+		defer os.RemoveAll(dir)
 
-		assert.Equal(t, Get("host"), "https://foo.com")
-		assert.Equal(t, Get("token"), "faketoken")
+		c := New()
+
+		in := bytes.NewBufferString("https://foo.com\nfaketoken\n")
+		out := &bytes.Buffer{}
+		c.Configure(dir, in, out)
+
+		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
+		got := out.String()
+
+		assert.Equal(t, want, got)
+		assert.FileExists(t, c.viper.ConfigFileUsed())
+		assert.Equal(t, c.Get("host"), "https://foo.com")
+		assert.Equal(t, c.Get("token"), "faketoken")
 	})
 }
 
 func TestList(t *testing.T) {
-	Load(testPath)
+	c := New()
 
-	buffer := &bytes.Buffer{}
-	List(buffer)
+	buf := &bytes.Buffer{}
+	c.List(buf)
 
-	want := `  NAME           VALUE          
- ------- ---------------------- 
-  host    https://abc.com       
-  token   NjEaWdDcARhzYKdx4fA4  
-`
-	got := buffer.String()
+	got := buf.String()
 
-	assert.Equal(t, want, got)
+	assert.Contains(t, got, "NAME")
+	assert.Contains(t, got, "VALUE")
+	assert.Contains(t, got, "host")
+	assert.Contains(t, got, "https://gitlab.com")
+	assert.Contains(t, got, "host")
+	assert.Contains(t, got, "None")
+}
+
+func getTestPath() string {
+	dir, _ := os.Getwd()
+
+	return dir + "/../../test"
 }

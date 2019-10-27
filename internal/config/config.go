@@ -12,72 +12,76 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	v          *viper.Viper
-	configPath string
-)
+const fileName = "golab.yaml"
 
-// Load read config with path
-func Load(path string) error {
-	configPath = path
+// Config wraps Viper.
+type Config struct {
+	viper *viper.Viper
+}
 
-	v = viper.New()
-	v.SetConfigName("golab")
-	v.SetConfigType("yaml")
+// New returns an initialized Config instance.
+func New() *Config {
+	v := viper.New()
 	v.SetDefault("host", "https://gitlab.com")
 	v.SetDefault("token", "None")
-	v.AddConfigPath(path)
 
-	return v.ReadInConfig()
+	return &Config{viper: v}
 }
 
-// Get returns the value associated with key from config
-func Get(key string) string {
-	return v.GetString(key)
+// Get returns the value associated with key.
+func (c *Config) Get(key string) string {
+	return c.viper.GetString(key)
 }
 
-// Configure configure and save file
-func Configure(r io.Reader, w io.Writer) error {
+// Load read Config from the given path.
+func (c *Config) Load(path string) error {
+	c.viper.SetConfigFile(filepath.Join(path, fileName))
+
+	return c.viper.ReadInConfig()
+}
+
+// Configure configure and save file.
+func (c *Config) Configure(path string, r io.Reader, w io.Writer) error {
 	reader := bufio.NewReader(r)
 
-	if host := readHost(w, reader); host != "" {
-		v.Set("host", host)
+	if host := c.readHost(w, reader); host != "" {
+		c.viper.Set("host", host)
 	}
 
-	if token := readToken(w, reader); token != "" {
-		v.Set("token", token)
+	if token := c.readToken(w, reader); token != "" {
+		c.viper.Set("token", token)
 	}
 
-	os.MkdirAll(configPath, os.ModePerm)
-	filePath := filepath.Join(configPath, "golab.yaml")
-	if err := v.WriteConfigAs(filePath); err != nil {
+	os.MkdirAll(path, os.ModePerm)
+	c.viper.SetConfigFile(filepath.Join(path, fileName))
+	if err := c.viper.WriteConfig(); err != nil {
 		return err
 	}
 
-	fmt.Fprintf(w, "\nConfig saved to %s\n", filePath)
+	fmt.Fprintf(w, "\nConfig saved to %s\n", c.viper.ConfigFileUsed())
 
 	return nil
 }
 
-func readHost(w io.Writer, reader *bufio.Reader) string {
-	fmt.Fprintf(w, "Gitlab Host [%s]: ", Get("host"))
+func (c *Config) readHost(w io.Writer, reader *bufio.Reader) string {
+	fmt.Fprintf(w, "Gitlab Host [%s]: ", c.Get("host"))
 	host, _ := reader.ReadString('\n')
 
 	return strings.TrimSpace(host)
 }
 
-func readToken(w io.Writer, reader *bufio.Reader) string {
-	fmt.Fprintf(w, "Gitlab Token (scope: api) [%s]: ", Get("token"))
+func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
+	fmt.Fprintf(w, "Gitlab Token (scope: api) [%s]: ", c.Get("token"))
 	token, _ := reader.ReadString('\n')
 
 	return strings.TrimSpace(token)
 }
 
-// List show config content
-func List(w io.Writer) {
+// List show Config content.
+func (c *Config) List(w io.Writer) {
 	rows := [][]string{
-		{"host", Get("host")},
-		{"token", Get("token")},
+		{"host", c.Get("host")},
+		{"token", c.Get("token")},
 	}
 	table := tablewriter.NewWriter(w)
 	table.SetHeader([]string{"Name", "Value"})

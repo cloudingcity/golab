@@ -10,14 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "golab",
 	Short: "A CLI tool for gitlab",
 }
-var configured bool
 
-// Execute adds all child commands to the root command and sets flags appropriately
+// Execute adds all child commands to the root command and sets flags appropriately.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -29,20 +28,23 @@ func init() {
 	cobra.OnInitialize(initConfig)
 }
 
-// initConfig reads in config file
+var (
+	c          *config.Config
+	configPath string
+	configured = false
+)
+
+// initConfig reads in config file.
 func initConfig() {
 	home, _ := os.UserHomeDir()
-	path := filepath.Join(home, ".config")
+	configPath = filepath.Join(home, ".config")
 
-	if err := config.Load(path); err != nil {
-		if err := config.Configure(os.Stdin, os.Stdout); err != nil {
+	c = config.New()
+
+	if err := c.Load(configPath); err != nil {
+		if err := c.Configure(configPath, os.Stdin, os.Stdout); err != nil {
 			log.Fatal(err)
 		}
-
-		if err := config.Load(path); err != nil {
-			log.Fatal(err)
-		}
-
 		configured = true
 	}
 }
