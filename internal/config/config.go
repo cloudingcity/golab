@@ -17,15 +17,16 @@ const fileName = "golab.yaml"
 // Config wraps Viper.
 type Config struct {
 	viper *viper.Viper
+	path  string
 }
 
 // New returns an initialized Config instance.
-func New() *Config {
+func New(path string) *Config {
 	v := viper.New()
 	v.SetDefault("host", "https://gitlab.com")
 	v.SetDefault("token", "None")
 
-	return &Config{viper: v}
+	return &Config{viper: v, path: path}
 }
 
 // Get returns the value associated with key.
@@ -34,14 +35,14 @@ func (c *Config) Get(key string) string {
 }
 
 // Load read config from the given path.
-func (c *Config) Load(path string) error {
-	c.viper.SetConfigFile(filepath.Join(path, fileName))
+func (c *Config) Load() error {
+	c.viper.SetConfigFile(filepath.Join(c.path, fileName))
 
 	return c.viper.ReadInConfig()
 }
 
 // Edit edit and save to file.
-func (c *Config) Edit(path string, r io.Reader, w io.Writer) error {
+func (c *Config) Edit(r io.Reader, w io.Writer) error {
 	reader := bufio.NewReader(r)
 
 	if host := c.readHost(w, reader); host != "" {
@@ -52,8 +53,8 @@ func (c *Config) Edit(path string, r io.Reader, w io.Writer) error {
 		c.viper.Set("token", token)
 	}
 
-	os.MkdirAll(path, os.ModePerm)
-	c.viper.SetConfigFile(filepath.Join(path, fileName))
+	os.MkdirAll(c.path, os.ModePerm)
+	c.viper.SetConfigFile(filepath.Join(c.path, fileName))
 	if err := c.viper.WriteConfig(); err != nil {
 		return err
 	}

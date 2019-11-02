@@ -14,7 +14,7 @@ var configEditCmd = &cobra.Command{
 			return nil
 		}
 
-		return c.Edit(configPath, os.Stdin, os.Stdout)
+		return c.Edit(os.Stdin, os.Stdout)
 	},
 }
 

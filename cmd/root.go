@@ -31,19 +31,17 @@ func init() {
 
 var (
 	c          *config.Config
-	configPath string
 	configured = false
 )
 
 // initConfig reads in config file.
 func initConfig() {
 	home, _ := os.UserHomeDir()
-	configPath = filepath.Join(home, ".config")
+	path := filepath.Join(home, ".config")
+	c = config.New(path)
 
-	c = config.New()
-
-	if err := c.Load(configPath); err != nil {
-		if err := c.Edit(configPath, os.Stdin, os.Stdout); err != nil {
+	if err := c.Load(); err != nil {
+		if err := c.Edit(os.Stdin, os.Stdout); err != nil {
 			log.Fatal(err)
 		}
 		configured = true

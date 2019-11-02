@@ -11,7 +11,7 @@ import (
 
 func TestNew(t *testing.T) {
 	t.Run("get correct default value", func(t *testing.T) {
-		c := New()
+		c := New("")
 
 		assert.Equal(t, c.Get("host"), "https://gitlab.com")
 		assert.Equal(t, c.Get("token"), "None")
@@ -20,8 +20,8 @@ func TestNew(t *testing.T) {
 
 func TestLoad(t *testing.T) {
 	t.Run("load success", func(t *testing.T) {
-		c := New()
-		err := c.Load(getTestPath())
+		c := New(testPath())
+		err := c.Load()
 
 		assert.NoError(t, err)
 		assert.Equal(t, c.Get("host"), "https://abc.com")
@@ -29,10 +29,10 @@ func TestLoad(t *testing.T) {
 	})
 
 	t.Run("load fail", func(t *testing.T) {
-		c := New()
-
 		fakePath := "/foo/bar/baz"
-		err := c.Load(fakePath)
+		c := New(fakePath)
+
+		err := c.Load()
 
 		assert.Error(t, err)
 	})
@@ -43,11 +43,11 @@ func TestEdit(t *testing.T) {
 		dir, _ := ioutil.TempDir("", "golab")
 		defer os.RemoveAll(dir)
 
-		c := New()
+		c := New(dir)
 
 		in := bytes.NewBufferString("\n\n")
 		out := &bytes.Buffer{}
-		c.Edit(dir, in, out)
+		c.Edit(in, out)
 
 		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
 		got := out.String()
@@ -62,11 +62,11 @@ func TestEdit(t *testing.T) {
 		dir, _ := ioutil.TempDir("", "golab")
 		defer os.RemoveAll(dir)
 
-		c := New()
+		c := New(dir)
 
 		in := bytes.NewBufferString("https://foo.com\nfaketoken\n")
 		out := &bytes.Buffer{}
-		c.Edit(dir, in, out)
+		c.Edit(in, out)
 
 		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
 		got := out.String()
@@ -79,7 +79,7 @@ func TestEdit(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	c := New()
+	c := New("")
 
 	buf := &bytes.Buffer{}
 	c.List(buf)
@@ -94,7 +94,7 @@ func TestList(t *testing.T) {
 	assert.Contains(t, got, "None")
 }
 
-func getTestPath() string {
+func testPath() string {
 	dir, _ := os.Getwd()
 
 	return dir + "/../../test"
