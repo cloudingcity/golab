@@ -38,7 +38,7 @@ func TestLoad(t *testing.T) {
 	})
 }
 
-func TestConfigure(t *testing.T) {
+func TestEdit(t *testing.T) {
 	t.Run("skip all input and get default value", func(t *testing.T) {
 		dir, _ := ioutil.TempDir("", "golab")
 		defer os.RemoveAll(dir)
@@ -47,7 +47,7 @@ func TestConfigure(t *testing.T) {
 
 		in := bytes.NewBufferString("\n\n")
 		out := &bytes.Buffer{}
-		c.Configure(dir, in, out)
+		c.Edit(dir, in, out)
 
 		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
 		got := out.String()
@@ -66,7 +66,7 @@ func TestConfigure(t *testing.T) {
 
 		in := bytes.NewBufferString("https://foo.com\nfaketoken\n")
 		out := &bytes.Buffer{}
-		c.Configure(dir, in, out)
+		c.Edit(dir, in, out)
 
 		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
 		got := out.String()

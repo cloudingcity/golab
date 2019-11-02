@@ -33,15 +33,15 @@ func (c *Config) Get(key string) string {
 	return c.viper.GetString(key)
 }
 
-// Load read Config from the given path.
+// Load read config from the given path.
 func (c *Config) Load(path string) error {
 	c.viper.SetConfigFile(filepath.Join(path, fileName))
 
 	return c.viper.ReadInConfig()
 }
 
-// Configure configure and save file.
-func (c *Config) Configure(path string, r io.Reader, w io.Writer) error {
+// Edit edit and save to file.
+func (c *Config) Edit(path string, r io.Reader, w io.Writer) error {
 	reader := bufio.NewReader(r)
 
 	if host := c.readHost(w, reader); host != "" {
@@ -77,7 +77,7 @@ func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
 	return strings.TrimSpace(token)
 }
 
-// List show Config content.
+// List show config content.
 func (c *Config) List(w io.Writer) {
 	rows := [][]string{
 		{"host", c.Get("host")},

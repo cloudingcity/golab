@@ -43,7 +43,7 @@ func initConfig() {
 	c = config.New()
 
 	if err := c.Load(configPath); err != nil {
-		if err := c.Configure(configPath, os.Stdin, os.Stdout); err != nil {
+		if err := c.Edit(configPath, os.Stdin, os.Stdout); err != nil {
 			log.Fatal(err)
 		}
 		configured = true
