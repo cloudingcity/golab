@@ -84,10 +84,11 @@ func (c *Config) List(w io.Writer) {
 		{"token", c.Get("token")},
 	}
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Name", "Value"})
+	table.SetHeader([]string{"NAME", "VALUE"})
+	table.SetHeaderLine(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	table.SetBorder(false)
-	table.SetCenterSeparator(" ")
-	table.SetColumnSeparator(" ")
+	table.SetColumnSeparator("\t")
 	table.AppendBulk(rows)
 	table.Render()
 }
