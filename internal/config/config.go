@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/viper"
 )
 
@@ -81,15 +80,13 @@ func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
 // List show config content.
 func (c *Config) List(w io.Writer) {
 	rows := [][]string{
+		{"NAME", "VALUE"},
 		{"host", c.Get("host")},
 		{"token", c.Get("token")},
 	}
-	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"NAME", "VALUE"})
-	table.SetHeaderLine(false)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetBorder(false)
-	table.SetColumnSeparator("\t")
-	table.AppendBulk(rows)
-	table.Render()
+
+	f := "  %s\t\t%s\n"
+	for _, row := range rows {
+		fmt.Fprintf(w, f, row[0], row[1])
+	}
 }
