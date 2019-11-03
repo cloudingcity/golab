@@ -7,13 +7,18 @@ import (
 	"path/filepath"
 
 	"github.com/cloudingcity/golab/internal/config"
+	"github.com/cloudingcity/golab/internal/gitlab"
+	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/spf13/cobra"
+	"github.com/tcnksm/go-gitconfig"
 )
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
-	Use:   "golab",
-	Short: "A CLI tool for gitlab",
+	Use:           "golab",
+	Short:         "A CLI tool for gitlab",
+	SilenceUsage:  true,
+	SilenceErrors: true,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -46,4 +51,22 @@ func initConfig() {
 		}
 		configured = true
 	}
+}
+
+func currentRepo() string {
+	url, err := gitconfig.OriginURL()
+	if err != nil {
+		log.Fatal("not a git repository")
+	}
+
+	return utils.ParseRepo(url)
+}
+
+func gitlabManager() *gitlab.Manager {
+	m, err := gitlab.NewManager(c.Get("host"), c.Get("token"), os.Stdout)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return m
 }
