@@ -1,5 +1,5 @@
 .PHONY: all
-all: lint vet test
+all: fmt lint vet test
 
 .PHONY: fmt
 fmt:
@@ -14,6 +14,9 @@ fmt:
 
 .PHONY: lint
 lint:
+	@hash golint > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		go get -u golang.org/x/lint/golint; \
+	fi
 	golint ./...
 
 .PHONY: vet
