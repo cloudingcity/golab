@@ -14,7 +14,7 @@ var configInitCmd = &cobra.Command{
 			return nil
 		}
 
-		return c.Init(os.Stdin, os.Stdout)
+		return config.Init(os.Stdin, os.Stdout)
 	},
 }
 

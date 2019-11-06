@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cloudingcity/golab/internal/config"
+	conf "github.com/cloudingcity/golab/internal/config"
 	"github.com/cloudingcity/golab/internal/gitlab"
 	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/spf13/cobra"
@@ -35,7 +35,7 @@ func init() {
 }
 
 var (
-	c          *config.Config
+	config     *conf.Config
 	configured = false
 )
 
@@ -43,10 +43,10 @@ var (
 func initConfig() {
 	home, _ := os.UserHomeDir()
 	path := filepath.Join(home, ".config")
-	c = config.New(path)
+	config = conf.New(path)
 
-	if err := c.Load(); err != nil {
-		if err := c.Init(os.Stdin, os.Stdout); err != nil {
+	if err := config.Load(); err != nil {
+		if err := config.Init(os.Stdin, os.Stdout); err != nil {
 			log.Fatal(err)
 		}
 		configured = true
@@ -63,7 +63,7 @@ func currentRepo() string {
 }
 
 func gitlabManager() *gitlab.Manager {
-	m, err := gitlab.NewManager(c.Get("host"), c.Get("token"), os.Stdout)
+	m, err := gitlab.NewManager(config.Get("host"), config.Get("token"), os.Stdout)
 	if err != nil {
 		log.Fatal(err)
 	}

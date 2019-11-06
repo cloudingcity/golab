@@ -11,7 +11,7 @@ var configListCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List all configuration",
 	Run: func(cmd *cobra.Command, args []string) {
-		c.List(os.Stdout)
+		config.List(os.Stdout)
 	},
 }
 
