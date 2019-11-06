@@ -40,8 +40,8 @@ func (c *Config) Load() error {
 	return c.viper.ReadInConfig()
 }
 
-// Edit edit and save to file.
-func (c *Config) Edit(r io.Reader, w io.Writer) error {
+// Init create a config file, update it if exists.
+func (c *Config) Init(r io.Reader, w io.Writer) error {
 	reader := bufio.NewReader(r)
 
 	if host := c.readHost(w, reader); host != "" {
