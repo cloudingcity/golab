@@ -11,7 +11,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-const fileName = "golab.yaml"
+const (
+	fileName  = "golab.yaml"
+	tokenPath = "profile/personal_access_tokens"
+)
 
 // Config wraps Viper.
 type Config struct {
@@ -71,6 +74,8 @@ func (c *Config) readHost(w io.Writer, reader *bufio.Reader) string {
 }
 
 func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
+	tokenUrl := c.Get("host") + "/" + tokenPath
+	fmt.Fprintf(w, "Create a token here: %s\n", tokenUrl)
 	fmt.Fprintf(w, "Gitlab Token (scope: api) [%s]: ", c.Get("token"))
 	token, _ := reader.ReadString('\n')
 

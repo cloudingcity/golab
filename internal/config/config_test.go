@@ -49,10 +49,12 @@ func TestInit(t *testing.T) {
 		out := &bytes.Buffer{}
 		c.Init(in, out)
 
-		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
 		got := out.String()
+		assert.Contains(t, got, "Gitlab Host [https://gitlab.com]:")
+		assert.Contains(t, got, "Create a token here: https://gitlab.com/profile/personal_access_tokens")
+		assert.Contains(t, got, "Gitlab Token (scope: api) [None]:")
+		assert.Contains(t, got, "Config saved to "+c.viper.ConfigFileUsed())
 
-		assert.Equal(t, want, got)
 		assert.FileExists(t, c.viper.ConfigFileUsed())
 		assert.Equal(t, c.Get("host"), "https://gitlab.com")
 		assert.Equal(t, c.Get("token"), "None")
@@ -68,10 +70,12 @@ func TestInit(t *testing.T) {
 		out := &bytes.Buffer{}
 		c.Init(in, out)
 
-		want := "Gitlab Host [https://gitlab.com]: Gitlab Token (scope: api) [None]: \nConfig saved to " + c.viper.ConfigFileUsed() + "\n"
 		got := out.String()
+		assert.Contains(t, got, "Gitlab Host [https://gitlab.com]:")
+		assert.Contains(t, got, "Create a token here: https://foo.com/profile/personal_access_tokens")
+		assert.Contains(t, got, "Gitlab Token (scope: api) [None]:")
+		assert.Contains(t, got, "Config saved to "+c.viper.ConfigFileUsed())
 
-		assert.Equal(t, want, got)
 		assert.FileExists(t, c.viper.ConfigFileUsed())
 		assert.Equal(t, c.Get("host"), "https://foo.com")
 		assert.Equal(t, c.Get("token"), "faketoken")
