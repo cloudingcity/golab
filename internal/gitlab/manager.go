@@ -14,13 +14,12 @@ type Manager struct {
 // NewManager returns a gitlab service manager.
 func NewManager(host, token string, out io.Writer) (*Manager, error) {
 	client := gitlab.NewClient(nil, token)
-	err := client.SetBaseURL(host)
-	if err != nil {
+	if err := client.SetBaseURL(host); err != nil {
 		return nil, err
 	}
 
 	m := &Manager{}
-	m.MergeRequest = &mergeRequest{client.MergeRequests, out}
+	m.MergeRequest = &mergeRequest{mr: client.MergeRequests, out: out}
 
 	return m, nil
 }

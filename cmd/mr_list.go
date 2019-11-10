@@ -10,13 +10,12 @@ var mrListCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List merge requests",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		m := gitlabManager()
 		opt := &gitlab.ListProjectMergeRequestsOptions{
 			State:   gitlab.String("opened"),
 			OrderBy: gitlab.String("updated_at"),
 		}
 
-		return m.MergeRequest.List(currentRepo(), opt)
+		return gitlabManager().MergeRequest.List(currentRepo(), opt)
 	},
 }
 
