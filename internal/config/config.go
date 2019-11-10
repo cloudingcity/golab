@@ -74,8 +74,8 @@ func (c *Config) readHost(w io.Writer, reader *bufio.Reader) string {
 }
 
 func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
-	tokenUrl := c.Get("host") + "/" + tokenPath
-	fmt.Fprintf(w, "Create a token here: %s\n", tokenUrl)
+	tokenURL := c.Get("host") + "/" + tokenPath
+	fmt.Fprintf(w, "Create a token here: %s\n", tokenURL)
 	fmt.Fprintf(w, "Gitlab Token (scope: api) [%s]: ", c.Get("token"))
 	token, _ := reader.ReadString('\n')
 
