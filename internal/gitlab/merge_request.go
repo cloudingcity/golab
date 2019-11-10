@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/pkg/browser"
+	"github.com/pkg/errors"
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -43,7 +44,7 @@ func (s *mergeRequest) render(mrs []*gitlab.MergeRequest) {
 // Open browse merge request in the default browser.
 func (s *mergeRequest) Open(project, id string) error {
 	if _, err := strconv.Atoi(id); err != nil {
-		return err
+		return errors.Errorf("invalid merge request id: '%s'", id)
 	}
 	s.url.Path = path.Join(project, "merge_requests", id)
 
