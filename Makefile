@@ -17,7 +17,7 @@ lint:
 	@hash golint > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
 		go get -u golang.org/x/lint/golint; \
 	fi
-	golint ./...
+	golint -set_exit_status ./...
 
 .PHONY: vet
 vet:
