@@ -3,8 +3,11 @@ package gitlab
 import (
 	"fmt"
 	"io"
+	"net/url"
+	"path"
 	"strconv"
 
+	"github.com/pkg/browser"
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -13,6 +16,7 @@ type mergeRequestService interface {
 }
 
 type mergeRequest struct {
+	url *url.URL
 	mr  mergeRequestService
 	out io.Writer
 }
@@ -34,4 +38,14 @@ func (s *mergeRequest) render(mrs []*gitlab.MergeRequest) {
 		id := strconv.Itoa(mr.IID)
 		fmt.Fprintf(s.out, f, id, mr.Title)
 	}
+}
+
+// Open browse merge request in the default browser.
+func (s *mergeRequest) Open(project, id string) error {
+	if _, err := strconv.Atoi(id); err != nil {
+		return err
+	}
+	s.url.Path = path.Join(project, "merge_requests", id)
+
+	return browser.OpenURL(s.url.String())
 }

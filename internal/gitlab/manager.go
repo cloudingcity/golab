@@ -19,7 +19,7 @@ func NewManager(host, token string, out io.Writer) (*Manager, error) {
 	}
 
 	m := &Manager{}
-	m.MergeRequest = &mergeRequest{mr: client.MergeRequests, out: out}
+	m.MergeRequest = &mergeRequest{url: client.BaseURL(), mr: client.MergeRequests, out: out}
 
 	return m, nil
 }

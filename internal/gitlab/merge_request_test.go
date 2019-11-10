@@ -31,3 +31,12 @@ func TestMergeRequestList(t *testing.T) {
 		assert.Contains(t, got, want)
 	}
 }
+
+func TestMergeRequestOpen(t *testing.T) {
+	t.Run("invalid id", func(t *testing.T) {
+		mr := &mergeRequest{}
+		err := mr.Open("foo", "aaa")
+
+		assert.Error(t, err)
+	})
+}
