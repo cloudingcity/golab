@@ -12,7 +12,9 @@ func TestParseGitProject(t *testing.T) {
 		want string
 	}{
 		{give: "git@gitlab.com:foo/bar.git", want: "foo/bar"},
+		{give: "git@gitlab.com:foo/bar/baz.git", want: "foo/bar/baz"},
 		{give: "https://gitlab.com/foo/bar.git", want: "foo/bar"},
+		{give: "https://gitlab.com/foo/bar/baz.git", want: "foo/bar/baz"},
 	}
 
 	for _, tt := range tests {
