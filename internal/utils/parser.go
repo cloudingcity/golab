@@ -2,8 +2,8 @@ package utils
 
 import "strings"
 
-// ParseRepo parses git remote url.
-func ParseRepo(url string) string {
+// ParseGitProject parses git remote url and project name.
+func ParseGitProject(url string) string {
 	var elems []string
 
 	if strings.Contains(url, "@") {

@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseRepo(t *testing.T) {
+func TestParseGitProject(t *testing.T) {
 	tests := []struct {
 		give string
 		want string
@@ -16,6 +16,6 @@ func TestParseRepo(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		assert.Equal(t, tt.want, ParseRepo(tt.give))
+		assert.Equal(t, tt.want, ParseGitProject(tt.give))
 	}
 }

@@ -59,7 +59,7 @@ func currentProject() string {
 	if err != nil {
 		log.Fatal("not a git repository")
 	}
-	return utils.ParseRepo(url)
+	return utils.ParseGitProject(url)
 }
 
 func gitlabClient() *gitlab.Client {
