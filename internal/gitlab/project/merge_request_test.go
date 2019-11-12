@@ -25,7 +25,7 @@ func TestMergeRequestList(t *testing.T) {
 
 	mr.List(nil)
 
-	wants := []string{"#1", "#2", "Title 1", "Title 2"}
+	wants := []string{"ID", "TITLE", "1", "2", "Title 1", "Title 2"}
 	got := buf.String()
 	for _, want := range wants {
 		assert.Contains(t, got, want)
