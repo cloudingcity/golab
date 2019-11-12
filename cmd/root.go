@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	conf "github.com/cloudingcity/golab/internal/config"
+	"github.com/cloudingcity/golab/internal/gitlab/group"
 	"github.com/cloudingcity/golab/internal/gitlab/project"
 	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/spf13/cobra"
@@ -59,7 +60,7 @@ func currentProject() string {
 	if err != nil {
 		log.Fatal("not a git repository")
 	}
-	return utils.ParseRepo(url)
+	return utils.ParseGitProject(url)
 }
 
 func gitlabClient() *gitlab.Client {
@@ -73,4 +74,8 @@ func gitlabClient() *gitlab.Client {
 
 func projectManager() *project.Manager {
 	return project.NewManager(gitlabClient(), currentProject(), os.Stdout)
+}
+
+func groupManager() *group.Manager {
+	return group.NewManager(gitlabClient(), os.Stdout)
 }
