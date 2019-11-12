@@ -14,8 +14,7 @@ var mrListCmd = &cobra.Command{
 			State:   gitlab.String("opened"),
 			OrderBy: gitlab.String("updated_at"),
 		}
-
-		return gitlabManager().MergeRequest.List(currentRepo(), opt)
+		return projectManager().MergeRequest.List(opt)
 	},
 }
 

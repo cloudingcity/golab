@@ -1,4 +1,4 @@
-package gitlab
+package project
 
 import (
 	"bytes"
@@ -8,10 +8,10 @@ import (
 	"github.com/xanzy/go-gitlab"
 )
 
-type stubMergeRequestService struct {
+type stubMergeRequestsService struct {
 }
 
-func (s *stubMergeRequestService) ListProjectMergeRequests(pid interface{}, opt *gitlab.ListProjectMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error) {
+func (s *stubMergeRequestsService) ListProjectMergeRequests(pid interface{}, opt *gitlab.ListProjectMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error) {
 	return []*gitlab.MergeRequest{
 		{IID: 1, Title: "Title 1"},
 		{IID: 2, Title: "Title 2"},
@@ -19,11 +19,11 @@ func (s *stubMergeRequestService) ListProjectMergeRequests(pid interface{}, opt 
 }
 
 func TestMergeRequestList(t *testing.T) {
-	s := &stubMergeRequestService{}
+	s := &stubMergeRequestsService{}
 	buf := &bytes.Buffer{}
-	mr := &mergeRequest{mr: s, out: buf}
+	mr := &mergeRequestsService{mr: s, out: buf}
 
-	mr.List("foo", nil)
+	mr.List(nil)
 
 	wants := []string{"#1", "#2", "Title 1", "Title 2"}
 	got := buf.String()
@@ -34,8 +34,8 @@ func TestMergeRequestList(t *testing.T) {
 
 func TestMergeRequestOpen(t *testing.T) {
 	t.Run("invalid id", func(t *testing.T) {
-		mr := &mergeRequest{}
-		err := mr.Open("foo", "aaa")
+		mr := &mergeRequestsService{}
+		err := mr.Open("aaa")
 
 		assert.Error(t, err)
 	})

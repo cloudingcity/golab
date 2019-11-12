@@ -1,4 +1,4 @@
-package gitlab
+package project
 
 import (
 	"fmt"
@@ -12,41 +12,40 @@ import (
 	"github.com/xanzy/go-gitlab"
 )
 
-type mergeRequestService interface {
+type gitlabMergeRequestsService interface {
 	ListProjectMergeRequests(pid interface{}, opt *gitlab.ListProjectMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
 }
 
-type mergeRequest struct {
-	url *url.URL
-	mr  mergeRequestService
-	out io.Writer
+type mergeRequestsService struct {
+	project string
+	mr      gitlabMergeRequestsService
+	out     io.Writer
+	url     *url.URL
 }
 
 // List lists merge requests on a project.
-func (s *mergeRequest) List(project string, opt *gitlab.ListProjectMergeRequestsOptions) error {
-	mrs, _, err := s.mr.ListProjectMergeRequests(project, opt)
+func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions) error {
+	mrs, _, err := s.mr.ListProjectMergeRequests(s.project, opt)
 	if err != nil {
 		return err
 	}
 
-	s.render(mrs)
+	s.renderList(mrs)
 	return nil
 }
 
-func (s *mergeRequest) render(mrs []*gitlab.MergeRequest) {
-	f := "  #%s  %s\n"
+func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
 	for _, mr := range mrs {
-		id := strconv.Itoa(mr.IID)
-		fmt.Fprintf(s.out, f, id, mr.Title)
+		fmt.Fprintf(s.out, "  #%d  %s\n", mr.IID, mr.Title)
 	}
 }
 
 // Open browse merge request in the default browser.
-func (s *mergeRequest) Open(project, id string) error {
+func (s *mergeRequestsService) Open(id string) error {
 	if _, err := strconv.Atoi(id); err != nil {
 		return errors.Errorf("invalid merge request id: '%s'", id)
 	}
-	s.url.Path = path.Join(project, "merge_requests", id)
+	s.url.Path = path.Join(s.project, "merge_requests", id)
 
 	return browser.OpenURL(s.url.String())
 }

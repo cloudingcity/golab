@@ -9,7 +9,7 @@ var mrOpenCmd = &cobra.Command{
 	Short: "Open a merge request page in the default browser",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return gitlabManager().MergeRequest.Open(currentRepo(), args[0])
+		return projectManager().MergeRequest.Open(args[0])
 	},
 }
 
