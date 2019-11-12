@@ -1,6 +1,9 @@
 package utils
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 // ParseGitProject parses git remote url and project name.
 func ParseGitProject(url string) string {
@@ -14,4 +17,10 @@ func ParseGitProject(url string) string {
 	}
 
 	return strings.TrimSuffix(elems[1], ".git")
+}
+
+// ParseMRProject parses merge request url and return project name.
+func ParseMRProject(url string) string {
+	return regexp.MustCompile(`https://[\w.]+/(?P<project>.+)/merge_requests.+`).
+		FindStringSubmatch(url)[1]
 }
