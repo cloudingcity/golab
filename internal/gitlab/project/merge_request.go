@@ -1,12 +1,12 @@
 package project
 
 import (
-	"fmt"
 	"io"
 	"net/url"
 	"path"
 	"strconv"
 
+	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/pkg/browser"
 	"github.com/pkg/errors"
 	"github.com/xanzy/go-gitlab"
@@ -35,9 +35,12 @@ func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions)
 }
 
 func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
+	table := utils.NewTable(s.out)
+	table.SetHeader([]string{"id", "title"})
 	for _, mr := range mrs {
-		fmt.Fprintf(s.out, "  #%d  %s\n", mr.IID, mr.Title)
+		table.Append([]string{strconv.Itoa(mr.IID), mr.Title})
 	}
+	table.Render()
 }
 
 // Open browse merge request in the default browser.

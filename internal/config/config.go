@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/spf13/viper"
 )
 
@@ -85,13 +86,12 @@ func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
 // List show config content.
 func (c *Config) List(w io.Writer) {
 	rows := [][]string{
-		{"NAME", "VALUE"},
 		{"host", c.Get("host")},
 		{"token", c.Get("token")},
 	}
 
-	f := "  %s\t\t%s\n"
-	for _, row := range rows {
-		fmt.Fprintf(w, f, row[0], row[1])
-	}
+	table := utils.NewTable(w)
+	table.SetHeader([]string{"name", "value"})
+	table.AppendBulk(rows)
+	table.Render()
 }
