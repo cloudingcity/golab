@@ -35,7 +35,7 @@ func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
 	table := utils.NewTable(s.out)
 	table.SetHeader([]string{"id", "project", "title"})
 	for _, mr := range mrs {
-		id := strconv.Itoa(mr.ProjectID) + "-" + strconv.Itoa(mr.IID)
+		id := strconv.Itoa(mr.ProjectID) + " " + strconv.Itoa(mr.IID)
 		p := utils.ParseMRProject(mr.WebURL)
 		table.Append([]string{id, p, mr.Title})
 	}

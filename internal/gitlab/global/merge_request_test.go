@@ -30,7 +30,7 @@ func TestMergeRequestsServiceList(t *testing.T) {
 
 	mr.List(nil)
 
-	wants := []string{"ID", "PROJECT", "TITLE", "100-1", "200-2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2"}
+	wants := []string{"ID", "PROJECT", "TITLE", "100 1", "200 2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2"}
 	got := buf.String()
 	for _, want := range wants {
 		assert.Contains(t, got, want)
