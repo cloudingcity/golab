@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -17,16 +16,13 @@ import (
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
-	Use:           "golab",
-	Short:         "A CLI tool for gitlab",
-	SilenceUsage:  true,
-	SilenceErrors: true,
+	Use:   "golab",
+	Short: "A CLI tool for gitlab",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
 }
