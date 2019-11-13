@@ -85,13 +85,10 @@ func (c *Config) readToken(w io.Writer, reader *bufio.Reader) string {
 
 // List show config content.
 func (c *Config) List(w io.Writer) {
+	h := []string{"name", "value"}
 	rows := [][]string{
 		{"host", c.Get("host")},
 		{"token", c.Get("token")},
 	}
-
-	table := utils.NewTable(w)
-	table.SetHeader([]string{"name", "value"})
-	table.AppendBulk(rows)
-	table.Render()
+	utils.RenderTable(w, h, rows)
 }

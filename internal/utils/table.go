@@ -6,8 +6,8 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-// NewTable returns initialized table instance.
-func NewTable(w io.Writer) *tablewriter.Table {
+// RenderTable returns initialized table instance.
+func RenderTable(w io.Writer, headers []string, rows [][]string) {
 	table := tablewriter.NewWriter(w)
 	table.SetColWidth(1000)
 	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
@@ -16,5 +16,7 @@ func NewTable(w io.Writer) *tablewriter.Table {
 	table.SetColumnSeparator(" ")
 	table.SetHeaderLine(false)
 
-	return table
+	table.SetHeader(headers)
+	table.AppendBulk(rows)
+	table.Render()
 }
