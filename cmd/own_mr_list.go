@@ -15,7 +15,7 @@ var ownMrListCmd = &cobra.Command{
 			OrderBy: gitlab.String("updated_at"),
 			Scope:   scope(),
 		}
-		return groupManager().MergeRequest.List(opt)
+		return globalManager().MergeRequest.List(opt)
 	},
 }
 

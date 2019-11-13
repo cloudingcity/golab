@@ -1,4 +1,4 @@
-package group
+package global
 
 import (
 	"io"
