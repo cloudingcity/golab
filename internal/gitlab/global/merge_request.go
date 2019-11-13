@@ -43,17 +43,17 @@ func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
 }
 
 // Open browse merge request in the default browser.
-func (s *mergeRequestsService) Open(projectId, mrId string) error {
-	if _, err := strconv.Atoi(projectId); err != nil {
-		return errors.Errorf("invalid project id: '%s'", projectId)
+func (s *mergeRequestsService) Open(projectID, mrID string) error {
+	if _, err := strconv.Atoi(projectID); err != nil {
+		return errors.Errorf("invalid project id: '%s'", projectID)
 	}
 
-	mrIntId, err := strconv.Atoi(mrId)
+	mrIntID, err := strconv.Atoi(mrID)
 	if err != nil {
-		return errors.Errorf("merge request id: '%s'", mrId)
+		return errors.Errorf("merge request id: '%s'", mrID)
 	}
 
-	mr, _, err := s.mr.GetMergeRequest(projectId, mrIntId, nil)
+	mr, _, err := s.mr.GetMergeRequest(projectID, mrIntID, nil)
 	if err != nil {
 		return err
 	}
