@@ -35,12 +35,15 @@ func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions)
 }
 
 func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
-	table := utils.NewTable(s.out)
-	table.SetHeader([]string{"id", "title"})
+	var rows [][]string
+
+	h := []string{"id", "title"}
+
 	for _, mr := range mrs {
-		table.Append([]string{strconv.Itoa(mr.IID), mr.Title})
+		rows = append(rows, []string{strconv.Itoa(mr.IID), mr.Title})
 	}
-	table.Render()
+
+	utils.RenderTable(s.out, h, rows)
 }
 
 // Open browse merge request in the default browser.

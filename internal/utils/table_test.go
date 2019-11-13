@@ -1,20 +1,26 @@
 package utils
 
 import (
-	"reflect"
+	"bytes"
 	"testing"
 
-	"github.com/olekukonko/tablewriter"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewTable(t *testing.T) {
-	table := NewTable(nil)
-	elem := reflect.ValueOf(table).Elem()
+func TestRenderTable(t *testing.T) {
+	buf := &bytes.Buffer{}
+	h := []string{"title", "content"}
+	rows := [][]string{
+		{"Day 1", "Go to school"},
+		{"Day 2", "Go to shop"},
+	}
+	RenderTable(buf, h, rows)
 
-	assert.Equal(t, int64(1000), elem.FieldByName("mW").Int())
-	assert.Equal(t, int64(tablewriter.ALIGN_LEFT), elem.FieldByName("hAlign").Int())
-	assert.Equal(t, " ", elem.FieldByName("pCenter").String())
-	assert.Equal(t, " ", elem.FieldByName("pColumn").String())
-	assert.False(t, elem.FieldByName("hdrLine").Bool())
+	got := buf.String()
+	assert.Contains(t, got, "TITLE")
+	assert.Contains(t, got, "CONTENT")
+	assert.Contains(t, got, "Day 1")
+	assert.Contains(t, got, "Day 2")
+	assert.Contains(t, got, "Go to school")
+	assert.Contains(t, got, "Go to shop")
 }

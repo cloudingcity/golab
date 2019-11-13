@@ -32,14 +32,17 @@ func (s *mergeRequestsService) List(opt *gitlab.ListMergeRequestsOptions) error 
 }
 
 func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
-	table := utils.NewTable(s.out)
-	table.SetHeader([]string{"id", "project", "title"})
+	var rows [][]string
+
+	h := []string{"id", "project", "title"}
+
 	for _, mr := range mrs {
 		id := strconv.Itoa(mr.ProjectID) + " " + strconv.Itoa(mr.IID)
 		p := utils.ParseMRProject(mr.WebURL)
-		table.Append([]string{id, p, mr.Title})
+		rows = append(rows, []string{id, p, mr.Title})
 	}
-	table.Render()
+
+	utils.RenderTable(s.out, h, rows)
 }
 
 // Open browse merge request in the default browser.
