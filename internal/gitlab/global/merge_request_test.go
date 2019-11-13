@@ -2,6 +2,7 @@ package global
 
 import (
 	"bytes"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,6 +19,10 @@ func (s *stubMergeRequestsService) ListMergeRequests(opt *gitlab.ListMergeReques
 	}, nil, nil
 }
 
+func (s *stubMergeRequestsService) GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error) {
+	return nil, nil, errors.New("error")
+}
+
 func TestMergeRequestsServiceList(t *testing.T) {
 	s := &stubMergeRequestsService{}
 	buf := &bytes.Buffer{}
@@ -30,4 +35,27 @@ func TestMergeRequestsServiceList(t *testing.T) {
 	for _, want := range wants {
 		assert.Contains(t, got, want)
 	}
+}
+
+func TestMergeRequestsOpen(t *testing.T) {
+	s := &stubMergeRequestsService{}
+	mr := &mergeRequestsService{mr: s}
+
+	t.Run("invalid project id", func(t *testing.T) {
+		err := mr.Open("error project id", "123")
+
+		assert.Error(t, err)
+	})
+
+	t.Run("invalid merge request id", func(t *testing.T) {
+		err := mr.Open("123", "error mr id")
+
+		assert.Error(t, err)
+	})
+
+	t.Run("get merge requests error", func(t *testing.T) {
+		err := mr.Open("123", "123")
+
+		assert.Error(t, err)
+	})
 }

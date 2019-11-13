@@ -5,11 +5,14 @@ import (
 	"strconv"
 
 	"github.com/cloudingcity/golab/internal/utils"
+	"github.com/pkg/browser"
+	"github.com/pkg/errors"
 	"github.com/xanzy/go-gitlab"
 )
 
 type gitlabMergeRequestsService interface {
 	ListMergeRequests(opt *gitlab.ListMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
+	GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error)
 }
 
 type mergeRequestsService struct {
@@ -37,4 +40,23 @@ func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
 		table.Append([]string{id, p, mr.Title})
 	}
 	table.Render()
+}
+
+// Open browse merge request in the default browser.
+func (s *mergeRequestsService) Open(projectId, mrId string) error {
+	if _, err := strconv.Atoi(projectId); err != nil {
+		return errors.Errorf("invalid project id: '%s'", projectId)
+	}
+
+	mrIntId, err := strconv.Atoi(mrId)
+	if err != nil {
+		return errors.Errorf("merge request id: '%s'", mrId)
+	}
+
+	mr, _, err := s.mr.GetMergeRequest(projectId, mrIntId, nil)
+	if err != nil {
+		return err
+	}
+
+	return browser.OpenURL(mr.WebURL)
 }
