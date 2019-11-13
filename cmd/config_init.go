@@ -7,8 +7,9 @@ import (
 )
 
 var configInitCmd = &cobra.Command{
-	Use:   "init",
-	Short: "Create a config file, update it if exists",
+	Use:                   "init",
+	Short:                 "Create a config file, update it if exists",
+	DisableFlagsInUseLine: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if configured {
 			return nil
