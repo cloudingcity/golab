@@ -15,23 +15,13 @@ var ownMrListCmd = &cobra.Command{
 			OrderBy: gitlab.String("updated_at"),
 			Scope:   scope(),
 		}
-		return globalManager().MergeRequest.List(opt)
+		return globalManager().MergeRequest.List(opt, withURL)
 	},
 }
 
 func init() {
-	ownMrListCmd.Flags().BoolVar(&review, "review", false, "List merge requests assigned to you")
+	ownMrListCmd.Flags().BoolVarP(&review, "review", "r", false, "list merge requests assigned to you")
+	ownMrListCmd.Flags().BoolVarP(&withURL, "url", "u", false, "with url column")
+
 	ownMrCmd.AddCommand(ownMrListCmd)
-}
-
-var review bool
-
-func scope() *string {
-	scope := "created_by_me"
-
-	if review {
-		scope = "assigned_to_me"
-	}
-
-	return gitlab.String(scope)
 }

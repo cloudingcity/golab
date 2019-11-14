@@ -28,13 +28,27 @@ func TestMergeRequestsServiceList(t *testing.T) {
 	buf := &bytes.Buffer{}
 	mr := &mergeRequestsService{mr: s, out: buf}
 
-	mr.List(nil)
+	t.Run("list", func(t *testing.T) {
+		mr.List(nil, false)
 
-	wants := []string{"PID", "MRID", "PROJECT", "TITLE", "100", "1", "200", "2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2"}
-	got := buf.String()
-	for _, want := range wants {
-		assert.Contains(t, got, want)
-	}
+		wants := []string{"PID", "MRID", "PROJECT", "TITLE", "100", "1", "200", "2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2"}
+		got := buf.String()
+		for _, want := range wants {
+			assert.Contains(t, got, want)
+		}
+	})
+
+	t.Run("list with url", func(t *testing.T) {
+		mr.List(nil, true)
+
+		wants := []string{"PID", "MRID", "PROJECT", "TITLE", "100", "1", "200", "2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2",
+			"https://gitlab.com/foo/bar/merge_requests/1", "https://gitlab.com/foo/bar/baz/merge_requests/999",
+		}
+		got := buf.String()
+		for _, want := range wants {
+			assert.Contains(t, got, want)
+		}
+	})
 }
 
 func TestMergeRequestsOpen(t *testing.T) {

@@ -24,23 +24,35 @@ type mergeRequestsService struct {
 }
 
 // List lists merge requests on a project.
-func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions) error {
+func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions, withURL bool) error {
 	mrs, _, err := s.mr.ListProjectMergeRequests(s.project, opt)
 	if err != nil {
 		return err
 	}
 
-	s.renderList(mrs)
+	s.renderList(mrs, withURL)
 	return nil
 }
 
-func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
-	var rows [][]string
+func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest, withURL bool) {
+	var (
+		rows   [][]string
+		row, h []string
+	)
 
-	h := []string{"mrid", "title"}
+	if withURL {
+		h = []string{"mrid", "title", "url"}
+	} else {
+		h = []string{"mrid", "title"}
+	}
 
 	for _, mr := range mrs {
-		rows = append(rows, []string{strconv.Itoa(mr.IID), mr.Title})
+		if withURL {
+			row = []string{strconv.Itoa(mr.IID), mr.Title, mr.WebURL}
+		} else {
+			row = []string{strconv.Itoa(mr.IID), mr.Title}
+		}
+		rows = append(rows, row)
 	}
 
 	utils.RenderTable(s.out, h, rows)

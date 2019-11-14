@@ -13,11 +13,27 @@ var mrListCmd = &cobra.Command{
 		opt := &gitlab.ListProjectMergeRequestsOptions{
 			State:   gitlab.String("opened"),
 			OrderBy: gitlab.String("updated_at"),
+			Scope:   scope(),
 		}
-		return projectManager().MergeRequest.List(opt)
+		return projectManager().MergeRequest.List(opt, withURL)
 	},
 }
 
 func init() {
+	mrListCmd.Flags().BoolVarP(&review, "review", "r", false, "list merge requests assigned to you")
+	mrListCmd.Flags().BoolVarP(&withURL, "url", "u", false, "with url column")
+
 	mrCmd.AddCommand(mrListCmd)
+}
+
+var (
+	review  bool
+	withURL bool
+)
+
+func scope() *string {
+	if review {
+		return gitlab.String("assigned_to_me")
+	}
+	return gitlab.String("created_by_me")
 }
