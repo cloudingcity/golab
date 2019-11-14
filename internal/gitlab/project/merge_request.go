@@ -37,7 +37,7 @@ func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions)
 func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
 	var rows [][]string
 
-	h := []string{"id", "title"}
+	h := []string{"mrid", "title"}
 
 	for _, mr := range mrs {
 		rows = append(rows, []string{strconv.Itoa(mr.IID), mr.Title})

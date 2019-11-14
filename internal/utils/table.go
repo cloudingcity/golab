@@ -14,6 +14,7 @@ func RenderTable(w io.Writer, headers []string, rows [][]string) {
 	table.SetBorder(false)
 	table.SetCenterSeparator(" ")
 	table.SetColumnSeparator(" ")
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetHeaderLine(false)
 
 	table.SetHeader(headers)

@@ -34,12 +34,13 @@ func (s *mergeRequestsService) List(opt *gitlab.ListMergeRequestsOptions) error 
 func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest) {
 	var rows [][]string
 
-	h := []string{"id", "project", "title"}
+	h := []string{"pid", "mrid", "project", "title"}
 
 	for _, mr := range mrs {
-		id := strconv.Itoa(mr.ProjectID) + " " + strconv.Itoa(mr.IID)
+		pID := strconv.Itoa(mr.ProjectID)
+		mrID := strconv.Itoa(mr.IID)
 		p := utils.ParseMRProject(mr.WebURL)
-		rows = append(rows, []string{id, p, mr.Title})
+		rows = append(rows, []string{pID, mrID, p, mr.Title})
 	}
 
 	utils.RenderTable(s.out, h, rows)

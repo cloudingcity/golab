@@ -5,7 +5,7 @@ import (
 )
 
 var ownMrOpenCmd = &cobra.Command{
-	Use:                   "open [PROJECT-ID] [MR-ID]",
+	Use:                   "open [PID] [MRID]",
 	Short:                 "Open a merge request page in the default browser",
 	Args:                  cobra.MinimumNArgs(2),
 	DisableFlagsInUseLine: true,
