@@ -11,7 +11,7 @@ var ownMrListCmd = &cobra.Command{
 	Short:   "List merge requests created by you",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		opt := &gitlab.ListMergeRequestsOptions{
-			State:   gitlab.String("opened"),
+			State:   gitlab.String(ownMrListFlag.state),
 			OrderBy: gitlab.String("updated_at"),
 			Scope:   gitlab.String(ownMrListFlag.optionScope()),
 		}
@@ -21,6 +21,7 @@ var ownMrListCmd = &cobra.Command{
 
 type ownMrListFlagStruct struct {
 	review bool
+	state  string
 	url    bool
 }
 
@@ -36,6 +37,7 @@ var ownMrListFlag *ownMrListFlagStruct
 func init() {
 	ownMrListFlag = &ownMrListFlagStruct{}
 	ownMrListCmd.Flags().BoolVarP(&ownMrListFlag.review, "review", "r", false, "list merge requests assigned to you")
+	ownMrListCmd.Flags().StringVarP(&ownMrListFlag.state, "state", "s", "opened", "filter merge requests by state (opened/closed/locked/merged)")
 	ownMrListCmd.Flags().BoolVarP(&ownMrListFlag.url, "url", "u", false, "with url column")
 
 	ownMrCmd.AddCommand(ownMrListCmd)

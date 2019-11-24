@@ -11,7 +11,7 @@ var mrListCmd = &cobra.Command{
 	Short:   "List merge requests",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		opt := &gitlab.ListProjectMergeRequestsOptions{
-			State:   gitlab.String("opened"),
+			State:   gitlab.String(mrListFlag.state),
 			OrderBy: gitlab.String("updated_at"),
 			Scope:   gitlab.String(mrListFlag.optionScope()),
 		}
@@ -21,6 +21,7 @@ var mrListCmd = &cobra.Command{
 
 type mrListFlagStruct struct {
 	review bool
+	state  string
 	url    bool
 }
 
@@ -36,6 +37,7 @@ var mrListFlag *mrListFlagStruct
 func init() {
 	mrListFlag = &mrListFlagStruct{}
 	mrListCmd.Flags().BoolVarP(&mrListFlag.review, "review", "r", false, "list merge requests assigned to you")
+	mrListCmd.Flags().StringVarP(&mrListFlag.state, "state", "s", "opened", "filter merge requests by state (opened/closed/locked/merged)")
 	mrListCmd.Flags().BoolVarP(&mrListFlag.url, "url", "u", false, "with url column")
 
 	mrCmd.AddCommand(mrListCmd)
