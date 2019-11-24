@@ -8,7 +8,7 @@ import (
 var ownMrListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
-	Short:   "List merge requests",
+	Short:   "List merge requests created by you",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		opt := &gitlab.ListMergeRequestsOptions{
 			State:   gitlab.String("opened"),
