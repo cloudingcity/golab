@@ -13,22 +13,30 @@ var ownMrListCmd = &cobra.Command{
 		opt := &gitlab.ListMergeRequestsOptions{
 			State:   gitlab.String("opened"),
 			OrderBy: gitlab.String("updated_at"),
-			Scope:   globalScope(),
+			Scope:   gitlab.String(ownMrListFlag.optionScope()),
 		}
-		return globalManager().MergeRequest.List(opt, withURL)
+		return globalManager().MergeRequest.List(opt, ownMrListFlag.url)
 	},
 }
 
-func init() {
-	ownMrListCmd.Flags().BoolVarP(&review, "review", "r", false, "list merge requests assigned to you")
-	ownMrListCmd.Flags().BoolVarP(&withURL, "url", "u", false, "with url column")
-
-	ownMrCmd.AddCommand(ownMrListCmd)
+type ownMrListFlagStruct struct {
+	review bool
+	url    bool
 }
 
-func globalScope() *string {
-	if review {
-		return gitlab.String("assigned_to_me")
+func (f *ownMrListFlagStruct) optionScope() string {
+	if f.review {
+		return "assigned_to_me"
 	}
-	return gitlab.String("created_by_me")
+	return "created_by_me"
+}
+
+var ownMrListFlag *ownMrListFlagStruct
+
+func init() {
+	ownMrListFlag = &ownMrListFlagStruct{}
+	ownMrListCmd.Flags().BoolVarP(&ownMrListFlag.review, "review", "r", false, "list merge requests assigned to you")
+	ownMrListCmd.Flags().BoolVarP(&ownMrListFlag.url, "url", "u", false, "with url column")
+
+	ownMrCmd.AddCommand(ownMrListCmd)
 }

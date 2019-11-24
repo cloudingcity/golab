@@ -13,27 +13,30 @@ var mrListCmd = &cobra.Command{
 		opt := &gitlab.ListProjectMergeRequestsOptions{
 			State:   gitlab.String("opened"),
 			OrderBy: gitlab.String("updated_at"),
-			Scope:   projectScope(),
+			Scope:   gitlab.String(mrListFlag.optionScope()),
 		}
-		return projectManager().MergeRequest.List(opt, withURL)
+		return projectManager().MergeRequest.List(opt, mrListFlag.url)
 	},
 }
 
-func init() {
-	mrListCmd.Flags().BoolVarP(&review, "review", "r", false, "list merge requests assigned to you")
-	mrListCmd.Flags().BoolVarP(&withURL, "url", "u", false, "with url column")
-
-	mrCmd.AddCommand(mrListCmd)
+type mrListFlagStruct struct {
+	review bool
+	url    bool
 }
 
-var (
-	review  bool
-	withURL bool
-)
-
-func projectScope() *string {
-	if review {
-		return gitlab.String("assigned_to_me")
+func (f *mrListFlagStruct) optionScope() string {
+	if f.review {
+		return "assigned_to_me"
 	}
-	return gitlab.String("all")
+	return "all"
+}
+
+var mrListFlag *mrListFlagStruct
+
+func init() {
+	mrListFlag = &mrListFlagStruct{}
+	mrListCmd.Flags().BoolVarP(&mrListFlag.review, "review", "r", false, "list merge requests assigned to you")
+	mrListCmd.Flags().BoolVarP(&mrListFlag.url, "url", "u", false, "with url column")
+
+	mrCmd.AddCommand(mrListCmd)
 }
