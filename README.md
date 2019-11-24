@@ -4,3 +4,19 @@
 [![codecov](https://codecov.io/gh/cloudingcity/golab/branch/master/graph/badge.svg)](https://codecov.io/gh/cloudingcity/golab)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cloudingcity/golab)](https://goreportcard.com/report/github.com/cloudingcity/golab)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](http://godoc.org/github.com/cloudingcity/golab)
+
+`golab` is a command line tool that make working with GitLab easier.
+
+## Features
+
+- Easy to configure gitlab settings
+- Show all merge requests that created by you or assigned to you
+- Open page in default browser
+
+## Installation
+
+### Source
+
+```shell script
+go get -u github.com/cloudingcity/golab
+```
