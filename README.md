@@ -15,8 +15,16 @@
 
 ## Installation
 
+### Homebrew
+
+```shell script
+brew install cloudingcity/tap/golab
+```
+
 ### Source
 
 ```shell script
-go get -u github.com/cloudingcity/golab
+git clone git@github.com:cloudingcity/golab.git
+cd golab
+make install
 ```

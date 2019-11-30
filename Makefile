@@ -26,3 +26,7 @@ vet:
 .PHONY: test
 test:
 	go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+.PHONY: install
+install:
+	go install -ldflags "-X \"main.version=$$(git rev-parse --short=7 @)\"" .
