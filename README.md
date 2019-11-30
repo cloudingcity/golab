@@ -28,3 +28,44 @@ git clone git@github.com:cloudingcity/golab.git
 cd golab
 make install
 ```
+
+## Command Usage
+
+```
+A CLI tool for gitlab
+
+Usage:
+  golab [command]
+
+Available Commands:
+  config      Init or list golab CLI options
+  mr          Manage merge requests
+  own         Manage own resources
+  version     Print version number of golab
+
+Flags:
+  -h, --help   help for golab
+
+Use "golab [command] --help" for more information about a command.
+```
+
+### Initial config
+
+```shell script
+golab config init                                                                                                    master ↓ 1 ↑ 1 ✚ 1 
+```
+
+### Show current repository merge requests
+```shell script
+golab mr list
+```
+
+### Show all merge requests that assigned to you
+```shell script
+golab own mr list --review
+```
+
+### Open merge requests page in browser
+```shell script
+golab mr open <MR-ID>
+```
