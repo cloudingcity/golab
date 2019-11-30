@@ -12,4 +12,5 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/tcnksm/go-gitconfig v0.1.2
 	github.com/xanzy/go-gitlab v0.21.0
+	golang.org/x/net v0.0.0-20190620200207-3b0461eec859 // indirect
 )
