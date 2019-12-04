@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"io"
 	"net/url"
 	"path"
@@ -14,6 +15,7 @@ import (
 
 type gitlabMergeRequestsService interface {
 	ListProjectMergeRequests(pid interface{}, opt *gitlab.ListProjectMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
+	GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error)
 }
 
 type mergeRequestsService struct {
@@ -66,4 +68,55 @@ func (s *mergeRequestsService) Open(id string) error {
 	s.url.Path = path.Join(s.project, "merge_requests", id)
 
 	return browser.OpenURL(s.url.String())
+}
+
+// Show show a merge request on a project
+func (s *mergeRequestsService) Show(mrID int) error {
+	mr, _, err := s.mr.GetMergeRequest(s.project, mrID, &gitlab.GetMergeRequestsOptions{})
+	if err != nil {
+		return err
+	}
+
+	s.renderShow(mr)
+	return nil
+}
+
+func (s *mergeRequestsService) renderShow(mr *gitlab.MergeRequest) {
+	var assignee string
+	if mr.Assignee != nil {
+		assignee = mr.Assignee.Username
+	}
+	createdAt := mr.CreatedAt.Format("2006-01-02 15:04:05")
+	updatedAt := mr.UpdatedAt.Format("2006-01-02 15:04:05")
+
+	format := `
+%s
+--------------------------------------------------
+%s
+--------------------------------------------------
+PID         %d  
+MRID        %d
+Project     %s
+Branch      %s -> %s
+State       %s
+Author      %s
+Assignee    %s
+CreatedAt   %s
+UpdatedAt   %s
+Url         %s
+`
+	fmt.Fprintf(s.out, format,
+		mr.Title,
+		mr.Description,
+		mr.ProjectID,
+		mr.IID,
+		s.project,
+		mr.SourceBranch, mr.TargetBranch,
+		mr.State,
+		mr.Author.Username,
+		assignee,
+		createdAt,
+		updatedAt,
+		mr.WebURL,
+	)
 }
