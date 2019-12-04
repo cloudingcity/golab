@@ -2,6 +2,7 @@ package project
 
 import (
 	"bytes"
+	"net/url"
 	"testing"
 	"time"
 
@@ -54,13 +55,17 @@ func TestMergeRequestList(t *testing.T) {
 	})
 }
 
-func TestMergeRequestOpen(t *testing.T) {
-	t.Run("invalid id", func(t *testing.T) {
-		mr := &mergeRequestsService{}
-		err := mr.Open("aaa")
+func TestMRURL(t *testing.T) {
+	u, _ := url.Parse("https://foo.com")
+	mr := &mergeRequestsService{
+		project: "my-project",
+		baseURL: u,
+	}
 
-		assert.Error(t, err)
-	})
+	want := "https://foo.com/my-project/merge_requests/123"
+	got := mr.mrURL("123")
+
+	assert.Equal(t, want, got)
 }
 
 func TestMergeRequestShow(t *testing.T) {
