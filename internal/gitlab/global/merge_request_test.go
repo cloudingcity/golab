@@ -50,26 +50,3 @@ func TestMergeRequestsServiceList(t *testing.T) {
 		}
 	})
 }
-
-func TestMergeRequestsOpen(t *testing.T) {
-	s := &stubMergeRequestsService{}
-	mr := &mergeRequestsService{mr: s}
-
-	t.Run("invalid project id", func(t *testing.T) {
-		err := mr.Open("error project id", "123")
-
-		assert.Error(t, err)
-	})
-
-	t.Run("invalid merge request id", func(t *testing.T) {
-		err := mr.Open("123", "error mr id")
-
-		assert.Error(t, err)
-	})
-
-	t.Run("get merge requests error", func(t *testing.T) {
-		err := mr.Open("123", "123")
-
-		assert.Error(t, err)
-	})
-}

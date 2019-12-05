@@ -18,7 +18,7 @@ func NewManager(c *gitlab.Client, project string, w io.Writer) *Manager {
 		project: project,
 		mr:      c.MergeRequests,
 		out:     w,
-		url:     c.BaseURL(),
+		baseURL: c.BaseURL(),
 	}
 
 	return m
