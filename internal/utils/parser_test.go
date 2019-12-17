@@ -27,7 +27,7 @@ func TestParseMRProject(t *testing.T) {
 		give string
 		want string
 	}{
-		{give: "https://gitlab.com/foo/bar/merge_requests/1 ", want: "foo/bar"},
+		{give: "https://gitlab.com/foo/bar/merge_requests/1", want: "foo/bar"},
 		{give: "https://gitlab.com/foo/bar/baz/merge_requests/999", want: "foo/bar/baz"},
 	}
 
