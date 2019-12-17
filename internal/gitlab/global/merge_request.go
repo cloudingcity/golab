@@ -1,6 +1,7 @@
 package global
 
 import (
+	"fmt"
 	"io"
 	"strconv"
 
@@ -68,4 +69,55 @@ func (s *mergeRequestsService) Open(pID string, mrID int) error {
 	}
 
 	return browser.OpenURL(mr.WebURL)
+}
+
+// Show show a merge request on a project
+func (s *mergeRequestsService) Show(pID string, mrID int) error {
+	mr, _, err := s.mr.GetMergeRequest(pID, mrID, &gitlab.GetMergeRequestsOptions{})
+	if err != nil {
+		return err
+	}
+
+	s.renderShow(mr)
+	return nil
+}
+
+func (s *mergeRequestsService) renderShow(mr *gitlab.MergeRequest) {
+	var assignee string
+	if mr.Assignee != nil {
+		assignee = mr.Assignee.Username
+	}
+	createdAt := mr.CreatedAt.Format("2006-01-02 15:04:05")
+	updatedAt := mr.UpdatedAt.Format("2006-01-02 15:04:05")
+
+	format := `
+%s
+--------------------------------------------------
+%s
+--------------------------------------------------
+PID         %d  
+MRID        %d
+Project     %s
+Branch      %s -> %s
+State       %s
+Author      %s
+Assignee    %s
+CreatedAt   %s
+UpdatedAt   %s
+Url         %s
+`
+	fmt.Fprintf(s.out, format,
+		mr.Title,
+		mr.Description,
+		mr.ProjectID,
+		mr.IID,
+		utils.ParseMRProject(mr.WebURL),
+		mr.SourceBranch, mr.TargetBranch,
+		mr.State,
+		mr.Author.Username,
+		assignee,
+		createdAt,
+		updatedAt,
+		mr.WebURL,
+	)
 }

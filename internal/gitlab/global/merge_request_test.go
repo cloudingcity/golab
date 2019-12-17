@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xanzy/go-gitlab"
@@ -20,6 +21,16 @@ func (s *stubMergeRequestsService) ListMergeRequests(opt *gitlab.ListMergeReques
 }
 
 func (s *stubMergeRequestsService) GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error) {
+	if pid == "test-show" {
+		return &gitlab.MergeRequest{
+			Author:    &gitlab.BasicUser{},
+			Assignee:  &gitlab.BasicUser{},
+			CreatedAt: gitlab.Time(time.Now()),
+			UpdatedAt: gitlab.Time(time.Now()),
+			WebURL:    "https://gitlab.com/foo/bar/merge_requests/123",
+		}, nil, nil
+	}
+
 	return nil, nil, errors.New("error")
 }
 
@@ -44,6 +55,22 @@ func TestMergeRequestsServiceList(t *testing.T) {
 		wants := []string{"PID", "MRID", "PROJECT", "TITLE", "100", "1", "200", "2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2",
 			"https://gitlab.com/foo/bar/merge_requests/1", "https://gitlab.com/foo/bar/baz/merge_requests/999",
 		}
+		got := buf.String()
+		for _, want := range wants {
+			assert.Contains(t, got, want)
+		}
+	})
+}
+
+func TestMergeRequestShow(t *testing.T) {
+	s := &stubMergeRequestsService{}
+	buf := &bytes.Buffer{}
+	mr := &mergeRequestsService{mr: s, out: buf}
+
+	t.Run("show", func(t *testing.T) {
+		mr.Show("test-show", 123)
+
+		wants := []string{"PID", "MRID", "Project", "Branch", "State", "Author", "Assignee", "CreatedAt", "UpdatedAt"}
 		got := buf.String()
 		for _, want := range wants {
 			assert.Contains(t, got, want)
