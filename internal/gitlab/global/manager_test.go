@@ -14,4 +14,5 @@ func TestNewManager(t *testing.T) {
 	m := NewManager(c, nil)
 
 	assert.NotNil(t, m.MergeRequest)
+	assert.NotNil(t, m.Validate)
 }

@@ -9,6 +9,7 @@ import (
 // Manager manages gitlab services.
 type Manager struct {
 	MergeRequest *mergeRequestsService
+	Validate     *validateService
 }
 
 // NewManager returns a gitlab service manager.
@@ -17,6 +18,10 @@ func NewManager(c *gitlab.Client, w io.Writer) *Manager {
 	m.MergeRequest = &mergeRequestsService{
 		mr:  c.MergeRequests,
 		out: w,
+	}
+	m.Validate = &validateService{
+		validate: c.Validate,
+		out:      w,
 	}
 
 	return m
