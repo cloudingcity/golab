@@ -9,8 +9,6 @@ brews:
     github:
       owner: cloudingcity
       name: homebrew-tap
-    dependencies:
-    - git
     install: |
       bin.install "golab"
 builds:
