@@ -6,7 +6,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-// RenderTable returns initialized table instance.
+// RenderTable render table content.
 func RenderTable(w io.Writer, headers []string, rows [][]string) {
 	table := tablewriter.NewWriter(w)
 	table.SetColWidth(1000)
