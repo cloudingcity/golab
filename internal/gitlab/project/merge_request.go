@@ -1,13 +1,11 @@
 package project
 
 import (
-	"fmt"
 	"io"
 	"net/url"
 	"path"
-	"strconv"
 
-	"github.com/cloudingcity/golab/internal/utils"
+	"github.com/cloudingcity/golab/internal/gitlab/render"
 	"github.com/pkg/browser"
 	"github.com/xanzy/go-gitlab"
 )
@@ -25,50 +23,22 @@ type mergeRequestsService struct {
 }
 
 // List lists merge requests on a project.
-func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions, withURL bool) error {
+func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions) error {
 	mrs, _, err := s.mr.ListProjectMergeRequests(s.project, opt)
 	if err != nil {
 		return err
 	}
 
-	s.renderList(mrs, withURL)
+	render.New(s.out).ProjectMRs(mrs)
 	return nil
-}
-
-func (s *mergeRequestsService) renderList(mrs []*gitlab.MergeRequest, withURL bool) {
-	var (
-		rows   [][]string
-		row, h []string
-	)
-
-	if withURL {
-		h = []string{"mrid", "title", "url"}
-	} else {
-		h = []string{"mrid", "title"}
-	}
-
-	for _, mr := range mrs {
-		if withURL {
-			row = []string{strconv.Itoa(mr.IID), mr.Title, mr.WebURL}
-		} else {
-			row = []string{strconv.Itoa(mr.IID), mr.Title}
-		}
-		rows = append(rows, row)
-	}
-
-	utils.RenderTable(s.out, h, rows)
 }
 
 // Open browse merge request in the default browser.
 func (s *mergeRequestsService) Open(mrID string) error {
-	return browser.OpenURL(s.mrURL(mrID))
-}
-
-func (s *mergeRequestsService) mrURL(mrID string) string {
 	u := *s.baseURL
 	u.Path = path.Join(s.project, "merge_requests", mrID)
 
-	return u.String()
+	return browser.OpenURL(u.String())
 }
 
 // Show show a merge request on a project
@@ -78,46 +48,6 @@ func (s *mergeRequestsService) Show(mrID int) error {
 		return err
 	}
 
-	s.renderShow(mr)
+	render.New(s.out).MR(mr)
 	return nil
-}
-
-func (s *mergeRequestsService) renderShow(mr *gitlab.MergeRequest) {
-	var assignee string
-	if mr.Assignee != nil {
-		assignee = mr.Assignee.Username
-	}
-	createdAt := mr.CreatedAt.Format("2006-01-02 15:04:05")
-	updatedAt := mr.UpdatedAt.Format("2006-01-02 15:04:05")
-
-	format := `
-%s
---------------------------------------------------
-%s
---------------------------------------------------
-PID         %d  
-MRID        %d
-Project     %s
-Branch      %s -> %s
-State       %s
-Author      %s
-Assignee    %s
-CreatedAt   %s
-UpdatedAt   %s
-Url         %s
-`
-	fmt.Fprintf(s.out, format,
-		mr.Title,
-		mr.Description,
-		mr.ProjectID,
-		mr.IID,
-		s.project,
-		mr.SourceBranch, mr.TargetBranch,
-		mr.State,
-		mr.Author.Username,
-		assignee,
-		createdAt,
-		updatedAt,
-		mr.WebURL,
-	)
 }
