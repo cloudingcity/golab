@@ -1,11 +1,10 @@
 package global
 
 import (
-	"fmt"
 	"io"
 	"io/ioutil"
-	"strings"
 
+	"github.com/cloudingcity/golab/internal/gitlab/render"
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -25,25 +24,11 @@ func (s *validateService) Lint(path string) error {
 		return err
 	}
 
-	lint, _, err := s.validate.Lint(string(file))
+	result, _, err := s.validate.Lint(string(file))
 	if err != nil {
 		return err
 	}
 
-	s.renderLint(lint)
+	render.New(s.out).LintCI(result)
 	return nil
-}
-
-func (s *validateService) renderLint(lint *gitlab.LintResult) {
-	status := strings.Title(lint.Status) + "!"
-	fmt.Fprintln(s.out, status)
-
-	if len(lint.Errors) > 0 {
-		fmt.Fprintln(s.out)
-		fmt.Fprintln(s.out, "Errors:")
-
-		for _, e := range lint.Errors {
-			fmt.Fprintf(s.out, "  - %s\n", e)
-		}
-	}
 }
