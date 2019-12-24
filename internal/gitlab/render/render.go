@@ -45,7 +45,7 @@ func (r *Render) GlobalMRs(mrs []*gitlab.MergeRequest) {
 		row, h []string
 	)
 
-	h = []string{"pid", "mrid", "project", "title"}
+	h = []string{"pid", "mrid", "project", "title", "url"}
 
 	for _, mr := range mrs {
 		pID := strconv.Itoa(mr.ProjectID)

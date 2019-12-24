@@ -18,7 +18,11 @@ func TestProjectMRs(t *testing.T) {
 
 	New(buf).ProjectMRs(mrs)
 
-	wants := []string{"MRID", "TITLE", "1", "2", "Foo 1", "Foo 2", "https://foo/1", "https://foo/2"}
+	wants := []string{
+		"MRID", "TITLE", "URL",
+		"1", "Foo 1", "https://foo/1",
+		"2", "Foo 2", "https://foo/2",
+	}
 	got := buf.String()
 	for _, want := range wants {
 		assert.Contains(t, got, want)
@@ -34,7 +38,11 @@ func TestGlobalMRs(t *testing.T) {
 
 	New(buf).GlobalMRs(mrs)
 
-	wants := []string{"PID", "MRID", "PROJECT", "TITLE", "100", "1", "200", "2", "foo/bar", "foo/bar/baz", "Title 1", "Title 2"}
+	wants := []string{
+		"PID", "MRID", "PROJECT", "TITLE", "URL",
+		"100", "1", "foo/bar", "Title 1", "https://gitlab.com/foo/bar/merge_requests/1",
+		"100", "2", "foo/bar/baz", "Title 2", "https://gitlab.com/foo/bar/baz/merge_requests/999",
+	}
 	got := buf.String()
 	for _, want := range wants {
 		assert.Contains(t, got, want)
