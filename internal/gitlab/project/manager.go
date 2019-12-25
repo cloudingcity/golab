@@ -3,6 +3,7 @@ package project
 import (
 	"io"
 
+	"github.com/pkg/browser"
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -19,6 +20,7 @@ func NewManager(c *gitlab.Client, project string, w io.Writer) *Manager {
 		mr:      c.MergeRequests,
 		out:     w,
 		baseURL: c.BaseURL(),
+		openURL: browser.OpenURL,
 	}
 
 	return m
