@@ -8,12 +8,13 @@ import (
 	"github.com/xanzy/go-gitlab"
 )
 
-type gitlabValidateService interface {
+// GitlabValidateService is go-gitlab validate service interface.
+type GitlabValidateService interface {
 	Lint(content string, options ...gitlab.OptionFunc) (*gitlab.LintResult, *gitlab.Response, error)
 }
 
 type validateService struct {
-	validate gitlabValidateService
+	validate GitlabValidateService
 	out      io.Writer
 }
 
