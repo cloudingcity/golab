@@ -10,6 +10,7 @@ import (
 // Manager manages gitlab services.
 type Manager struct {
 	MergeRequest *mergeRequestsService
+	Search       *searchService
 }
 
 // NewManager returns a gitlab service manager.
@@ -21,6 +22,11 @@ func NewManager(c *gitlab.Client, project string, w io.Writer) *Manager {
 		out:     w,
 		baseURL: c.BaseURL(),
 		openURL: browser.OpenURL,
+	}
+	m.Search = &searchService{
+		project: project,
+		search:  c.Search,
+		out:     w,
 	}
 
 	return m
