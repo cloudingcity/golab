@@ -4,18 +4,19 @@ import (
 	"io"
 
 	"github.com/cloudingcity/golab/internal/gitlab/render"
-	"github.com/pkg/browser"
 	"github.com/xanzy/go-gitlab"
 )
 
-type gitlabMergeRequestsService interface {
+// GitlabMergeRequestsService is go-gitlab merge request service interface.
+type GitlabMergeRequestsService interface {
 	ListMergeRequests(opt *gitlab.ListMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
 	GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error)
 }
 
 type mergeRequestsService struct {
-	mr  gitlabMergeRequestsService
-	out io.Writer
+	mr      GitlabMergeRequestsService
+	out     io.Writer
+	openURL func(url string) error
 }
 
 // List lists merge requests on a project.
@@ -36,12 +37,12 @@ func (s *mergeRequestsService) Open(pID string, mrID int) error {
 		return err
 	}
 
-	return browser.OpenURL(mr.WebURL)
+	return s.openURL(mr.WebURL)
 }
 
 // Show show a merge request on a project
 func (s *mergeRequestsService) Show(pID string, mrID int) error {
-	mr, _, err := s.mr.GetMergeRequest(pID, mrID, &gitlab.GetMergeRequestsOptions{})
+	mr, _, err := s.mr.GetMergeRequest(pID, mrID, nil)
 	if err != nil {
 		return err
 	}
