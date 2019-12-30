@@ -4,17 +4,12 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/cloudingcity/golab/internal/gitlab/contract"
 	"github.com/cloudingcity/golab/internal/gitlab/render"
-	"github.com/xanzy/go-gitlab"
 )
 
-// GitlabValidateService is go-gitlab validate service interface.
-type GitlabValidateService interface {
-	Lint(content string, options ...gitlab.OptionFunc) (*gitlab.LintResult, *gitlab.Response, error)
-}
-
 type validateService struct {
-	validate GitlabValidateService
+	validate contract.GitlabValidate
 	out      io.Writer
 }
 

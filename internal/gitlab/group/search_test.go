@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/cloudingcity/golab/internal/gitlab/group/mocks"
+	"github.com/cloudingcity/golab/internal/gitlab/contract/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/xanzy/go-gitlab"
 )
@@ -12,7 +12,7 @@ import (
 func TestMR(t *testing.T) {
 	group := "foo"
 	query := "query string"
-	search := &mocks.GitlabSearchService{}
+	search := &mocks.GitlabSearch{}
 	search.On("MergeRequestsByGroup", group, query, &gitlab.SearchOptions{}).
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))

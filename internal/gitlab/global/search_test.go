@@ -4,14 +4,14 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/cloudingcity/golab/internal/gitlab/global/mocks"
+	"github.com/cloudingcity/golab/internal/gitlab/contract/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/xanzy/go-gitlab"
 )
 
 func TestMR(t *testing.T) {
 	query := "query string"
-	search := &mocks.GitlabSearchService{}
+	search := &mocks.GitlabSearch{}
 	search.On("MergeRequests", query, &gitlab.SearchOptions{}).
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))

@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/cloudingcity/golab/internal/gitlab/project/mocks"
+	"github.com/cloudingcity/golab/internal/gitlab/contract/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/xanzy/go-gitlab"
 )
@@ -14,7 +14,7 @@ import (
 func TestList(t *testing.T) {
 	project := "foo/bar"
 	opt := &gitlab.ListProjectMergeRequestsOptions{}
-	mr := &mocks.GitlabMergeRequestsService{}
+	mr := &mocks.GitlabMergeRequests{}
 	mr.On("ListProjectMergeRequests", project, opt).
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, nil)
@@ -47,7 +47,7 @@ func TestOpen(t *testing.T) {
 func TestShow(t *testing.T) {
 	project := "foo/bar"
 	mrID := 123
-	mr := &mocks.GitlabMergeRequestsService{}
+	mr := &mocks.GitlabMergeRequests{}
 	mr.On("GetMergeRequest", project, mrID, (*gitlab.GetMergeRequestsOptions)(nil)).
 		Once().
 		Return(&gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))

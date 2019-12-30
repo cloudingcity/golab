@@ -5,19 +5,14 @@ import (
 	"net/url"
 	"path"
 
+	"github.com/cloudingcity/golab/internal/gitlab/contract"
 	"github.com/cloudingcity/golab/internal/gitlab/render"
 	"github.com/xanzy/go-gitlab"
 )
 
-// GitlabMergeRequestsService is go-gitlab merge request service interface.
-type GitlabMergeRequestsService interface {
-	ListProjectMergeRequests(pid interface{}, opt *gitlab.ListProjectMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
-	GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error)
-}
-
 type mergeRequestsService struct {
 	project string
-	mr      GitlabMergeRequestsService
+	mr      contract.GitlabMergeRequests
 	out     io.Writer
 	baseURL *url.URL
 	openURL func(url string) error

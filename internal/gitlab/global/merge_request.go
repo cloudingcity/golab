@@ -3,18 +3,13 @@ package global
 import (
 	"io"
 
+	"github.com/cloudingcity/golab/internal/gitlab/contract"
 	"github.com/cloudingcity/golab/internal/gitlab/render"
 	"github.com/xanzy/go-gitlab"
 )
 
-// GitlabMergeRequestsService is go-gitlab merge request service interface.
-type GitlabMergeRequestsService interface {
-	ListMergeRequests(opt *gitlab.ListMergeRequestsOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
-	GetMergeRequest(pid interface{}, mergeRequest int, opt *gitlab.GetMergeRequestsOptions, options ...gitlab.OptionFunc) (*gitlab.MergeRequest, *gitlab.Response, error)
-}
-
 type mergeRequestsService struct {
-	mr      GitlabMergeRequestsService
+	mr      contract.GitlabMergeRequests
 	out     io.Writer
 	openURL func(url string) error
 }

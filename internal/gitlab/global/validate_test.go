@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudingcity/golab/internal/gitlab/global/mocks"
+	"github.com/cloudingcity/golab/internal/gitlab/contract/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/xanzy/go-gitlab"
 )
@@ -19,7 +19,7 @@ func TestLint(t *testing.T) {
 	})
 
 	t.Run("lint", func(t *testing.T) {
-		v := &mocks.GitlabValidateService{}
+		v := &mocks.GitlabValidate{}
 		v.On("Lint", "HelloWord\n").
 			Once().
 			Return(&gitlab.LintResult{}, &gitlab.Response{}, errors.New(""))
