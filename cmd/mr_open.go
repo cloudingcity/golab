@@ -21,7 +21,7 @@ var mrOpenCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return projectManager().MergeRequest.Open(args[0])
+		return projectManager(nil).MergeRequest.Open(args[0])
 	},
 }
 

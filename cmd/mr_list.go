@@ -16,7 +16,7 @@ var mrListCmd = &cobra.Command{
 			Scope:       gitlab.String(mrListFlag.optionScope()),
 			ListOptions: mrListFlag.optionList(),
 		}
-		return projectManager().MergeRequest.List(opt)
+		return projectManager(nil).MergeRequest.List(opt)
 	},
 }
 
