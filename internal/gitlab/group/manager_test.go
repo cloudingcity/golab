@@ -1,4 +1,4 @@
-package global
+package group
 
 import (
 	"testing"
@@ -9,11 +9,8 @@ import (
 
 func TestNewManager(t *testing.T) {
 	c := gitlab.NewClient(nil, "foo")
-	c.SetBaseURL("bar")
 
-	m := NewManager(c, nil)
+	m := NewManager(c, "foo", nil)
 
-	assert.NotNil(t, m.MergeRequest)
-	assert.NotNil(t, m.Validate)
 	assert.NotNil(t, m.Search)
 }

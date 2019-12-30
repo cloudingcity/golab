@@ -22,7 +22,7 @@ var mrShowCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		mrID, _ := strconv.Atoi(args[0])
-		return projectManager().MergeRequest.Show(mrID)
+		return projectManager(nil).MergeRequest.Show(mrID)
 	},
 }
 

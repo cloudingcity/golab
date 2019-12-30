@@ -7,6 +7,7 @@ import (
 
 	conf "github.com/cloudingcity/golab/internal/config"
 	"github.com/cloudingcity/golab/internal/gitlab/global"
+	"github.com/cloudingcity/golab/internal/gitlab/group"
 	"github.com/cloudingcity/golab/internal/gitlab/project"
 	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/spf13/cobra"
@@ -68,8 +69,17 @@ func gitlabClient() *gitlab.Client {
 	return c
 }
 
-func projectManager() *project.Manager {
-	return project.NewManager(gitlabClient(), currentProject(), os.Stdout)
+func projectManager(p *string) *project.Manager {
+	if p == nil {
+		temp := currentProject()
+		p = &temp
+	}
+
+	return project.NewManager(gitlabClient(), *p, os.Stdout)
+}
+
+func groupManager(g string) *group.Manager {
+	return group.NewManager(gitlabClient(), g, os.Stdout)
 }
 
 func globalManager() *global.Manager {
