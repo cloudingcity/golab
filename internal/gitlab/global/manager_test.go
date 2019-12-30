@@ -15,4 +15,5 @@ func TestNewManager(t *testing.T) {
 
 	assert.NotNil(t, m.MergeRequest)
 	assert.NotNil(t, m.Validate)
+	assert.NotNil(t, m.Search)
 }
