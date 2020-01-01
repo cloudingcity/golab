@@ -115,3 +115,21 @@ Errors:
 		assert.Equal(t, want, buf.String())
 	})
 }
+
+func TestDepends(t *testing.T) {
+	buf := &bytes.Buffer{}
+	results := []*DependResult{
+		{Project: "bar", Version: "v1.0.0", Branch: "master", URL: "https://gitlab.com/foo/bar"},
+	}
+
+	New(buf).Depends(results)
+
+	wants := []string{
+		"PROJECT", "VERSION", "BRANCH", "URL",
+		"bar", "v1.0.0", "master", "https://gitlab.com/foo/bar",
+	}
+	got := buf.String()
+	for _, want := range wants {
+		assert.Contains(t, got, want)
+	}
+}
