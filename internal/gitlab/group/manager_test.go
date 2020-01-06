@@ -13,4 +13,5 @@ func TestNewManager(t *testing.T) {
 	m := NewManager(c, "foo", nil)
 
 	assert.NotNil(t, m.Search)
+	assert.NotNil(t, m.Depend)
 }

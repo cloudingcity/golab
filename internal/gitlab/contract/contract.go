@@ -20,3 +20,13 @@ type GitlabSearch interface {
 type GitlabValidate interface {
 	Lint(content string, options ...gitlab.OptionFunc) (*gitlab.LintResult, *gitlab.Response, error)
 }
+
+// GitlabGroup is go-gitlab group service interface.
+type GitlabGroup interface {
+	ListGroupProjects(gid interface{}, opt *gitlab.ListGroupProjectsOptions, options ...gitlab.OptionFunc) ([]*gitlab.Project, *gitlab.Response, error)
+}
+
+// GitlabRepoFile is go-gitlab repository file service interface.
+type GitlabRepoFile interface {
+	GetRawFile(pid interface{}, fileName string, opt *gitlab.GetRawFileOptions, options ...gitlab.OptionFunc) ([]byte, *gitlab.Response, error)
+}
