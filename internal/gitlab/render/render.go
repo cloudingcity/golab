@@ -113,3 +113,28 @@ func (r *Render) LintCI(result *gitlab.LintResult) {
 		}
 	}
 }
+
+// DependResult is a dependency result struct.
+type DependResult struct {
+	Project string
+	Version string
+	Branch  string
+	URL     string
+}
+
+// Depends renders dependency results.
+func (r *Render) Depends(pkgs []*DependResult) {
+	var (
+		rows   [][]string
+		row, h []string
+	)
+
+	h = []string{"project", "version", "branch", "url"}
+
+	for _, pkg := range pkgs {
+		row = []string{pkg.Project, pkg.Version, pkg.Branch, pkg.URL}
+		rows = append(rows, row)
+	}
+
+	utils.RenderTable(r.out, h, rows)
+}
