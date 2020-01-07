@@ -13,9 +13,7 @@ cache:
     - $HOME/gopath/pkg/mod
 
 script:
-  - make fmt
   - make lint
-  - make vet
   - make test
 
 after_success:
