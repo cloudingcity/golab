@@ -7,7 +7,7 @@ import (
 
 	"github.com/cloudingcity/golab/internal/gitlab/contract"
 	"github.com/cloudingcity/golab/internal/gitlab/render"
-	"github.com/sirkon/goproxy/gomod"
+	"github.com/cloudingcity/gomod"
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -111,18 +111,20 @@ func (s *dependService) GO(pkg string) error {
 }
 
 func (s *dependService) goProcessor(project *gitlab.Project, pkg string) (version string) {
-	module, err := s.getGoModule(project)
+	mod, err := s.getGoModule(project)
 	if err != nil {
 		return ""
 	}
 
-	if version, ok := module.Require[pkg]; ok {
-		return version
+	for _, r := range mod.Require {
+		if r.Path == pkg {
+			return r.Version
+		}
 	}
 	return ""
 }
 
-func (s *dependService) getGoModule(project *gitlab.Project) (*gomod.Module, error) {
+func (s *dependService) getGoModule(project *gitlab.Project) (*gomod.GoMod, error) {
 	opt := &gitlab.GetRawFileOptions{
 		Ref: gitlab.String(project.DefaultBranch),
 	}
@@ -131,10 +133,10 @@ func (s *dependService) getGoModule(project *gitlab.Project) (*gomod.Module, err
 		return nil, err
 	}
 
-	module, err := gomod.Parse("go.mod", file)
+	mod, err := gomod.Parse(file)
 	if err != nil {
 		return nil, err
 	}
 
-	return module, nil
+	return mod, nil
 }
