@@ -10,13 +10,7 @@ var ownMrListCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List merge requests created by you",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		opt := &gitlab.ListMergeRequestsOptions{
-			State:       gitlab.String(ownMrListFlag.state),
-			OrderBy:     gitlab.String("updated_at"),
-			Scope:       gitlab.String(ownMrListFlag.optionScope()),
-			ListOptions: ownMrListFlag.optionList(),
-		}
-		return globalManager().MergeRequest.List(opt)
+		return globalManager().MergeRequest.List(ownMrListFlag.option())
 	},
 }
 
@@ -26,18 +20,20 @@ type ownMrListFlagStruct struct {
 	limit  int
 }
 
-func (f *ownMrListFlagStruct) optionScope() string {
-	if f.review {
-		return "assigned_to_me"
+func (f *ownMrListFlagStruct) option() *gitlab.ListMergeRequestsOptions {
+	opt := &gitlab.ListMergeRequestsOptions{
+		State:       gitlab.String(ownMrListFlag.state),
+		OrderBy:     gitlab.String("updated_at"),
+		ListOptions: gitlab.ListOptions{Page: 1, PerPage: f.limit},
 	}
-	return "created_by_me"
-}
 
-func (f *ownMrListFlagStruct) optionList() gitlab.ListOptions {
-	return gitlab.ListOptions{
-		Page:    1,
-		PerPage: f.limit,
+	if f.review {
+		opt.Scope = gitlab.String("assigned_to_me")
+	} else {
+		opt.Scope = gitlab.String("created_by_me")
 	}
+
+	return opt
 }
 
 var ownMrListFlag *ownMrListFlagStruct

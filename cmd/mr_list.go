@@ -10,13 +10,7 @@ var mrListCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List merge requests",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		opt := &gitlab.ListProjectMergeRequestsOptions{
-			State:       gitlab.String(mrListFlag.state),
-			OrderBy:     gitlab.String("updated_at"),
-			Scope:       gitlab.String(mrListFlag.optionScope()),
-			ListOptions: mrListFlag.optionList(),
-		}
-		return projectManager(nil).MergeRequest.List(opt)
+		return projectManager(nil).MergeRequest.List(mrListFlag.option())
 	},
 }
 
@@ -26,18 +20,20 @@ type mrListFlagStruct struct {
 	limit  int
 }
 
-func (f *mrListFlagStruct) optionScope() string {
-	if f.review {
-		return "assigned_to_me"
+func (f *mrListFlagStruct) option() *gitlab.ListProjectMergeRequestsOptions {
+	opt := &gitlab.ListProjectMergeRequestsOptions{
+		State:       gitlab.String(mrListFlag.state),
+		OrderBy:     gitlab.String("updated_at"),
+		ListOptions: gitlab.ListOptions{Page: 1, PerPage: f.limit},
 	}
-	return "all"
-}
 
-func (f *mrListFlagStruct) optionList() gitlab.ListOptions {
-	return gitlab.ListOptions{
-		Page:    1,
-		PerPage: f.limit,
+	if f.review {
+		opt.Scope = gitlab.String("assigned_to_me")
+	} else {
+		opt.Scope = gitlab.String("created_by_me")
 	}
+
+	return opt
 }
 
 var mrListFlag *mrListFlagStruct
