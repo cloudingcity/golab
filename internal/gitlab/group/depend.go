@@ -43,9 +43,7 @@ func (s *dependService) inspect(pkg string, pr processor) error {
 		wg.Add(len(projects))
 
 		for _, project := range projects {
-			project := project
-
-			go func() {
+			go func(project *gitlab.Project) {
 				defer wg.Done()
 
 				if version := pr(project, pkg); version != "" {
@@ -60,7 +58,7 @@ func (s *dependService) inspect(pkg string, pr processor) error {
 					results = append(results, result)
 					mutex.Unlock()
 				}
-			}()
+			}(project)
 		}
 		wg.Wait()
 	}

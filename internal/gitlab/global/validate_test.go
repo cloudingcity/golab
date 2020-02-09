@@ -19,15 +19,15 @@ func TestLint(t *testing.T) {
 	})
 
 	t.Run("lint", func(t *testing.T) {
-		v := &mocks.GitlabValidate{}
-		v.On("Lint", "HelloWord\n").
+		mockGitlabValidate := &mocks.GitlabValidate{}
+		mockGitlabValidate.On("Lint", "HelloWord\n").
 			Once().
 			Return(&gitlab.LintResult{}, &gitlab.Response{}, errors.New(""))
 
-		s := &validateService{validate: v}
+		s := &validateService{validate: mockGitlabValidate}
 		dir, _ := os.Getwd()
 		s.Lint(dir + "/../../../test/.gitlab-ci.yml")
 
-		v.AssertExpectations(t)
+		mockGitlabValidate.AssertExpectations(t)
 	})
 }

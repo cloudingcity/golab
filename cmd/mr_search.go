@@ -10,7 +10,7 @@ var mrSearchCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		q := args[0]
-		if mrSearchFlag.isGlobal {
+		if mrSearchFlag.global {
 			return globalManager().Search.MR(q)
 		}
 		if len(mrSearchFlag.group) != 0 {
@@ -25,9 +25,9 @@ var mrSearchCmd = &cobra.Command{
 }
 
 type mrSearchFlagStruct struct {
-	group    string
-	project  string
-	isGlobal bool
+	group   string
+	project string
+	global  bool
 }
 
 var mrSearchFlag *mrSearchFlagStruct
@@ -36,7 +36,7 @@ func init() {
 	mrSearchFlag = &mrSearchFlagStruct{}
 	mrSearchCmd.Flags().StringVarP(&mrSearchFlag.group, "group", "g", "", "specify group to search")
 	mrSearchCmd.Flags().StringVarP(&mrSearchFlag.project, "project", "p", "", "specify project to search")
-	mrSearchCmd.Flags().BoolVarP(&mrSearchFlag.isGlobal, "global", "", false, "search all places")
+	mrSearchCmd.Flags().BoolVarP(&mrSearchFlag.global, "global", "", false, "search all places")
 
 	mrCmd.AddCommand(mrSearchCmd)
 }

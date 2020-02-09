@@ -12,14 +12,14 @@ import (
 func TestMR(t *testing.T) {
 	project := "foo/bar"
 	query := "query string"
-	search := &mocks.GitlabSearch{}
-	search.On("MergeRequestsByProject", project, query, &gitlab.SearchOptions{}).
+	mockGitlabSearch := &mocks.GitlabSearch{}
+	mockGitlabSearch.On("MergeRequestsByProject", project, query, &gitlab.SearchOptions{}).
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))
 
-	s := &searchService{project: project, search: search}
+	s := &searchService{project: project, search: mockGitlabSearch}
 	err := s.MR(query)
 
 	assert.Error(t, err)
-	search.AssertExpectations(t)
+	mockGitlabSearch.AssertExpectations(t)
 }

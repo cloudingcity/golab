@@ -14,15 +14,15 @@ import (
 func TestList(t *testing.T) {
 	project := "foo/bar"
 	opt := &gitlab.ListProjectMergeRequestsOptions{}
-	mr := &mocks.GitlabMergeRequests{}
-	mr.On("ListProjectMergeRequests", project, opt).
+	mockGitlabMR := &mocks.GitlabMergeRequests{}
+	mockGitlabMR.On("ListProjectMergeRequests", project, opt).
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, nil)
 
-	s := &mergeRequestsService{project: project, mr: mr, out: &bytes.Buffer{}}
+	s := &mergeRequestsService{project: project, mr: mockGitlabMR, out: &bytes.Buffer{}}
 	s.List(opt)
 
-	mr.AssertExpectations(t)
+	mockGitlabMR.AssertExpectations(t)
 }
 
 func TestOpen(t *testing.T) {
@@ -47,14 +47,14 @@ func TestOpen(t *testing.T) {
 func TestShow(t *testing.T) {
 	project := "foo/bar"
 	mrID := 123
-	mr := &mocks.GitlabMergeRequests{}
-	mr.On("GetMergeRequest", project, mrID, (*gitlab.GetMergeRequestsOptions)(nil)).
+	mockGitlabMR := &mocks.GitlabMergeRequests{}
+	mockGitlabMR.On("GetMergeRequest", project, mrID, (*gitlab.GetMergeRequestsOptions)(nil)).
 		Once().
 		Return(&gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))
 
-	s := &mergeRequestsService{project: project, mr: mr, out: &bytes.Buffer{}}
+	s := &mergeRequestsService{project: project, mr: mockGitlabMR, out: &bytes.Buffer{}}
 	err := s.Show(mrID)
 
 	assert.Error(t, err)
-	mr.AssertExpectations(t)
+	mockGitlabMR.AssertExpectations(t)
 }
