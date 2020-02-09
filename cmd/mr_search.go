@@ -13,14 +13,14 @@ var mrSearchCmd = &cobra.Command{
 		if mrSearchFlag.global {
 			return globalManager().Search.MR(q)
 		}
-		if len(mrSearchFlag.group) != 0 {
-			if len(mrSearchFlag.project) != 0 {
-				p := mrSearchFlag.group + "/" + mrSearchFlag.project
-				return projectManager(&p).Search.MR(q)
-			}
+		if len(mrSearchFlag.group) == 0 {
+			return projectManager(nil).Search.MR(q)
+		}
+		if len(mrSearchFlag.project) == 0 {
 			return groupManager(mrSearchFlag.group).Search.MR(q)
 		}
-		return projectManager(nil).Search.MR(q)
+		p := mrSearchFlag.group + "/" + mrSearchFlag.project
+		return projectManager(&p).Search.MR(q)
 	},
 }
 
