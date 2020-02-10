@@ -3,6 +3,7 @@ package group
 import (
 	"encoding/json"
 	"io"
+	"sort"
 	"sync"
 
 	"github.com/cloudingcity/golab/internal/gitlab/contract"
@@ -48,10 +49,11 @@ func (s *dependService) inspect(pkg string, pr processor) error {
 
 				if version := pr(project, pkg); version != "" {
 					result := &render.DependResult{
-						Project: project.Name,
-						Version: version,
-						Branch:  project.DefaultBranch,
-						URL:     project.WebURL,
+						Project:        project.Name,
+						Version:        version,
+						Branch:         project.DefaultBranch,
+						URL:            project.WebURL,
+						LastActivityAt: *project.LastActivityAt,
 					}
 
 					mutex.Lock()
@@ -62,6 +64,10 @@ func (s *dependService) inspect(pkg string, pr processor) error {
 		}
 		wg.Wait()
 	}
+
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].LastActivityAt.After(results[j].LastActivityAt)
+	})
 
 	render.New(s.out).Depends(results)
 	return nil

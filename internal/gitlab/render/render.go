@@ -5,6 +5,7 @@ import (
 	"io"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cloudingcity/golab/internal/utils"
 	"github.com/xanzy/go-gitlab"
@@ -116,10 +117,11 @@ func (r *Render) LintCI(result *gitlab.LintResult) {
 
 // DependResult is a dependency result struct.
 type DependResult struct {
-	Project string
-	Version string
-	Branch  string
-	URL     string
+	Project        string
+	Version        string
+	Branch         string
+	URL            string
+	LastActivityAt time.Time
 }
 
 // Depends renders dependency results.

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/cloudingcity/golab/internal/gitlab/contract/mocks"
 	"github.com/stretchr/testify/assert"
@@ -26,9 +27,10 @@ func TestInspect(t *testing.T) {
 		Return(
 			[]*gitlab.Project{
 				{
-					Name:          "cool",
-					DefaultBranch: "master",
-					WebURL:        "https://gitlab.com/foo/cool",
+					Name:           "cool",
+					DefaultBranch:  "master",
+					WebURL:         "https://gitlab.com/foo/cool",
+					LastActivityAt: gitlab.Time(time.Now()),
 				},
 			},
 			&gitlab.Response{NextPage: 0},
