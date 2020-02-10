@@ -23,6 +23,17 @@
 brew install cloudingcity/tap/golab
 ```
 
+### Binary
+
+Download the pre-built binaries from the [Releases](https://github.com/cloudingcity/golab/releases) page. Extract them, move it to your `$PATH`.
+
+```shell script
+curl -OL https://github.com/cloudingcity/golab/releases/download/v0.6.1/golab_0.6.1_Linux_x86_64.tar.gz
+tar -xzvf golab_0.6.1_Linux_x86_64.tar.gz
+mv golab /usr/local/bin/golab
+golab version
+```
+
 ### Source
 
 ```shell script
