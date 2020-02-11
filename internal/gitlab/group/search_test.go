@@ -23,3 +23,18 @@ func TestMR(t *testing.T) {
 	assert.Error(t, err)
 	mockGitlabSearch.AssertExpectations(t)
 }
+
+func TestProject(t *testing.T) {
+	group := "foo"
+	query := "query string"
+	mockGitlabSearch := &mocks.GitlabSearch{}
+	mockGitlabSearch.On("ProjectsByGroup", group, query, &gitlab.SearchOptions{}).
+		Once().
+		Return([]*gitlab.Project{}, &gitlab.Response{}, errors.New(""))
+
+	s := &searchService{group: group, search: mockGitlabSearch}
+	err := s.Project(query)
+
+	assert.Error(t, err)
+	mockGitlabSearch.AssertExpectations(t)
+}

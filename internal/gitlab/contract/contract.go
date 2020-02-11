@@ -14,6 +14,8 @@ type GitlabSearch interface {
 	MergeRequestsByProject(pid interface{}, query string, opt *gitlab.SearchOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
 	MergeRequestsByGroup(gid interface{}, query string, opt *gitlab.SearchOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
 	MergeRequests(query string, opt *gitlab.SearchOptions, options ...gitlab.OptionFunc) ([]*gitlab.MergeRequest, *gitlab.Response, error)
+	Projects(query string, opt *gitlab.SearchOptions, options ...gitlab.OptionFunc) ([]*gitlab.Project, *gitlab.Response, error)
+	ProjectsByGroup(gid interface{}, query string, opt *gitlab.SearchOptions, options ...gitlab.OptionFunc) ([]*gitlab.Project, *gitlab.Response, error)
 }
 
 // GitlabValidate is go-gitlab validate service interface.
