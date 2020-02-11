@@ -34,9 +34,9 @@ var mrSearchFlag *mrSearchFlagStruct
 
 func init() {
 	mrSearchFlag = &mrSearchFlagStruct{}
-	mrSearchCmd.Flags().StringVarP(&mrSearchFlag.group, "group", "g", "", "specify group to search")
-	mrSearchCmd.Flags().StringVarP(&mrSearchFlag.project, "project", "p", "", "specify project to search")
-	mrSearchCmd.Flags().BoolVarP(&mrSearchFlag.global, "global", "", false, "search all places")
+	mrSearchCmd.Flags().BoolVarP(&mrSearchFlag.global, "global", "g", false, "search all places")
+	mrSearchCmd.Flags().StringVarP(&mrSearchFlag.group, "group", "", "", "specify group to search")
+	mrSearchCmd.Flags().StringVarP(&mrSearchFlag.project, "project", "", "", "specify project to search")
 
 	mrCmd.AddCommand(mrSearchCmd)
 }
