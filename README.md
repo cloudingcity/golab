@@ -56,6 +56,7 @@ Available Commands:
   depend      Shows project which depend on a certain package
   mr          Manage merge requests
   own         Manage own resources
+  project     Manage projects
   version     Print version number of golab
 
 Flags:

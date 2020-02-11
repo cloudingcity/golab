@@ -140,3 +140,21 @@ func (r *Render) Depends(pkgs []*DependResult) {
 
 	utils.RenderTable(r.out, h, rows)
 }
+
+// Projects renders projects.
+func (r *Render) Projects(projects []*gitlab.Project) {
+	var (
+		rows   [][]string
+		row, h []string
+	)
+
+	h = []string{"id", "project", "url"}
+
+	for _, project := range projects {
+		id := strconv.Itoa(project.ID)
+		row = []string{id, project.PathWithNamespace, project.WebURL}
+		rows = append(rows, row)
+	}
+
+	utils.RenderTable(r.out, h, rows)
+}

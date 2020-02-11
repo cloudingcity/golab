@@ -22,3 +22,13 @@ func (s *searchService) MR(query string) error {
 	render.New(s.out).GlobalMRs(mrs)
 	return nil
 }
+
+func (s *searchService) Project(query string) error {
+	projects, _, err := s.search.Projects(query, &gitlab.SearchOptions{})
+	if err != nil {
+		return err
+	}
+
+	render.New(s.out).Projects(projects)
+	return nil
+}
