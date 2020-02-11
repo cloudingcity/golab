@@ -133,3 +133,23 @@ func TestDepends(t *testing.T) {
 		assert.Contains(t, got, want)
 	}
 }
+
+func TestProjects(t *testing.T) {
+	buf := &bytes.Buffer{}
+	projects := []*gitlab.Project{
+		{ID: 100, NameWithNamespace: "pokemon/pikachu", WebURL: "https://gitlab.com/pokemon/pikachu"},
+		{ID: 200, NameWithNamespace: "pokemon/pichu", WebURL: "https://gitlab.com/pokemon/pichu"},
+	}
+
+	New(buf).Projects(projects)
+
+	wants := []string{
+		"ID", "PROJECT", "URL",
+		"100", "pokemon/pikachu", "https://gitlab.com/pokemon/pikachu",
+		"200", "pokemon/pichu", "https://gitlab.com/pokemon/pichu",
+	}
+	got := buf.String()
+	for _, want := range wants {
+		assert.Contains(t, got, want)
+	}
+}
