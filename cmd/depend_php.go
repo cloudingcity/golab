@@ -5,7 +5,7 @@ import (
 )
 
 var dependPHPCmd = &cobra.Command{
-	Use:                   "php [PKG] [--group]",
+	Use:                   "php [PACKAGE] [--group]",
 	Short:                 "List composer package (vendor/name) dependency",
 	Args:                  cobra.ExactArgs(1),
 	DisableFlagsInUseLine: true,

@@ -5,7 +5,7 @@ import (
 )
 
 var dependGOCmd = &cobra.Command{
-	Use:                   "go [PKG] [--group]",
+	Use:                   "go [PACKAGE] [--group]",
 	Short:                 "List go module package (example.com/hello) dependency",
 	Args:                  cobra.ExactArgs(1),
 	DisableFlagsInUseLine: true,
