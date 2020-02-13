@@ -52,6 +52,7 @@ Usage:
 
 Available Commands:
   ci          Manage gitlab ci
+  clone       Clone a repository from GitLab
   config      Init or list golab CLI options
   depend      Shows project which depend on a certain package
   mr          Manage merge requests
@@ -74,6 +75,12 @@ Create a token here: https://gitlab.com/profile/personal_access_tokens
 Gitlab Token (scope: api) [None]: <INPUT>
 
 Config saved to /Users/<USER>/.config/golab.yaml
+```
+
+### Clone repository from GitLab
+```shell script
+$ golab clone pokemon/eevee
+# git clone git@gitlab.com:pokemon/eevee.git
 ```
 
 ### Show current repository merge requests
