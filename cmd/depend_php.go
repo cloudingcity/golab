@@ -22,7 +22,7 @@ var dependPHPFlag *dependPHPFlagStruct
 
 func init() {
 	dependPHPFlag = &dependPHPFlagStruct{}
-	dependPHPCmd.Flags().StringVarP(&dependPHPFlag.group, "group", "", "", "group to inspect")
+	dependPHPCmd.Flags().StringVarP(&dependPHPFlag.group, "group", "g", "", "group to inspect")
 	dependPHPCmd.MarkFlagRequired("group")
 	dependPHPCmd.MarkFlagRequired("pkg")
 }

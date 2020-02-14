@@ -25,5 +25,5 @@ var projectSearchFlag *projectSearchFlagStruct
 
 func init() {
 	projectSearchFlag = &projectSearchFlagStruct{}
-	projectSearchCmd.Flags().StringVarP(&projectSearchFlag.group, "group", "", "", "specify group to search")
+	projectSearchCmd.Flags().StringVarP(&projectSearchFlag.group, "group", "g", "", "filter by group")
 }

@@ -42,5 +42,5 @@ func init() {
 	ownMrListFlag = &ownMrListFlagStruct{}
 	ownMrListCmd.Flags().IntVarP(&ownMrListFlag.limit, "limit", "l", 20, "number of merge requests to list (max 100)")
 	ownMrListCmd.Flags().BoolVarP(&ownMrListFlag.review, "review", "r", false, "list merge requests assigned to you")
-	ownMrListCmd.Flags().StringVarP(&ownMrListFlag.state, "state", "s", "opened", "filter merge requests by state (opened/closed/locked/merged)")
+	ownMrListCmd.Flags().StringVarP(&ownMrListFlag.state, "state", "s", "opened", "filter by state (opened/closed/locked/merged)")
 }
