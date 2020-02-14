@@ -11,4 +11,8 @@ var mrCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(mrCmd)
+	mrCmd.AddCommand(mrListCmd)
+	mrCmd.AddCommand(mrOpenCmd)
+	mrCmd.AddCommand(mrSearchCmd)
+	mrCmd.AddCommand(mrShowCmd)
 }

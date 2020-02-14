@@ -25,7 +25,3 @@ var mrShowCmd = &cobra.Command{
 		return projectManager(nil).MergeRequest.Show(mrID)
 	},
 }
-
-func init() {
-	mrCmd.AddCommand(mrShowCmd)
-}

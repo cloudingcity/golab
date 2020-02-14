@@ -25,6 +25,4 @@ func init() {
 	dependPHPCmd.Flags().StringVarP(&dependPHPFlag.group, "group", "", "", "group to inspect")
 	dependPHPCmd.MarkFlagRequired("group")
 	dependPHPCmd.MarkFlagRequired("pkg")
-
-	dependCmd.AddCommand(dependPHPCmd)
 }

@@ -24,7 +24,3 @@ var mrOpenCmd = &cobra.Command{
 		return projectManager(nil).MergeRequest.Open(args[0])
 	},
 }
-
-func init() {
-	mrCmd.AddCommand(mrOpenCmd)
-}

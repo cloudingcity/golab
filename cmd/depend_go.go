@@ -24,6 +24,4 @@ func init() {
 	dependGOFlag = &dependGOFlagStruct{}
 	dependGOCmd.Flags().StringVarP(&dependGOFlag.group, "group", "", "", "group to inspect")
 	dependGOCmd.MarkFlagRequired("group")
-
-	dependCmd.AddCommand(dependGOCmd)
 }

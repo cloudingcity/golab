@@ -11,4 +11,8 @@ var ownCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(ownCmd)
+	ownCmd.AddCommand(ownMrCmd)
+	ownMrCmd.AddCommand(ownMrListCmd)
+	ownMrCmd.AddCommand(ownMrOpenCmd)
+	ownMrCmd.AddCommand(ownMrShowCmd)
 }

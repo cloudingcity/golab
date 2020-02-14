@@ -11,4 +11,6 @@ var dependCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(dependCmd)
+	dependCmd.AddCommand(dependGOCmd)
+	dependCmd.AddCommand(dependPHPCmd)
 }

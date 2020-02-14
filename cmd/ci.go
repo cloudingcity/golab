@@ -11,4 +11,5 @@ var ciCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(ciCmd)
+	ciCmd.AddCommand(ciLintCmd)
 }
