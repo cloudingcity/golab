@@ -7,9 +7,6 @@ import (
 var mrCmd = &cobra.Command{
 	Use:   "mr",
 	Short: "Manage merge requests",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return cmd.Help()
-	},
 }
 
 func init() {

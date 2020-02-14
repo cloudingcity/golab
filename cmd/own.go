@@ -7,9 +7,6 @@ import (
 var ownCmd = &cobra.Command{
 	Use:   "own",
 	Short: "Manage own resources",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return cmd.Help()
-	},
 }
 
 func init() {
