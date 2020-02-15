@@ -10,37 +10,37 @@ var mrListCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List merge requests",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return projectManager(nil).MergeRequest.List(mrListFlag.option())
+		limit, err := cmd.Flags().GetInt("limit")
+		if err != nil {
+			return err
+		}
+		review, err := cmd.Flags().GetBool("review")
+		if err != nil {
+			return err
+		}
+		state, err := cmd.Flags().GetString("state")
+		if err != nil {
+			return err
+		}
+
+		opt := &gitlab.ListProjectMergeRequestsOptions{
+			State:       gitlab.String(state),
+			OrderBy:     gitlab.String("updated_at"),
+			ListOptions: gitlab.ListOptions{Page: 1, PerPage: limit},
+		}
+
+		if review {
+			opt.Scope = gitlab.String("assigned_to_me")
+		} else {
+			opt.Scope = gitlab.String("created_by_me")
+		}
+
+		return projectManager(nil).MergeRequest.List(opt)
 	},
 }
 
-type mrListFlagStruct struct {
-	review bool
-	state  string
-	limit  int
-}
-
-func (f *mrListFlagStruct) option() *gitlab.ListProjectMergeRequestsOptions {
-	opt := &gitlab.ListProjectMergeRequestsOptions{
-		State:       gitlab.String(mrListFlag.state),
-		OrderBy:     gitlab.String("updated_at"),
-		ListOptions: gitlab.ListOptions{Page: 1, PerPage: f.limit},
-	}
-
-	if f.review {
-		opt.Scope = gitlab.String("assigned_to_me")
-	} else {
-		opt.Scope = gitlab.String("created_by_me")
-	}
-
-	return opt
-}
-
-var mrListFlag *mrListFlagStruct
-
 func init() {
-	mrListFlag = &mrListFlagStruct{}
-	mrListCmd.Flags().IntVarP(&mrListFlag.limit, "limit", "l", 20, "number of merge requests to list (max 100)")
-	mrListCmd.Flags().BoolVarP(&mrListFlag.review, "review", "r", false, "list merge requests assigned to you")
-	mrListCmd.Flags().StringVarP(&mrListFlag.state, "state", "s", "opened", "filter by state (opened/closed/locked/merged)")
+	mrListCmd.Flags().IntP("limit", "l", 20, "number of merge requests to list (max 100)")
+	mrListCmd.Flags().BoolP("review", "r", false, "list merge requests assigned to you")
+	mrListCmd.Flags().StringP("state", "s", "opened", "filter by state (opened/closed/locked/merged)")
 }

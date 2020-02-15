@@ -10,19 +10,15 @@ var dependPHPCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(1),
 	DisableFlagsInUseLine: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return groupManager(dependPHPFlag.group).Depend.PHP(args[0])
+		group, err := cmd.Flags().GetString("group")
+		if err != nil {
+			return err
+		}
+		return groupManager(group).Depend.PHP(args[0])
 	},
 }
 
-type dependPHPFlagStruct struct {
-	group string
-}
-
-var dependPHPFlag *dependPHPFlagStruct
-
 func init() {
-	dependPHPFlag = &dependPHPFlagStruct{}
-	dependPHPCmd.Flags().StringVarP(&dependPHPFlag.group, "group", "g", "", "group to inspect")
+	dependPHPCmd.Flags().StringP("group", "g", "", "group to inspect")
 	dependPHPCmd.MarkFlagRequired("group")
-	dependPHPCmd.MarkFlagRequired("pkg")
 }

@@ -9,21 +9,19 @@ var projectSearchCmd = &cobra.Command{
 	Short: "Search projects",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		group, err := cmd.Flags().GetString("group")
+		if err != nil {
+			return err
+		}
 		q := args[0]
-		if len(projectSearchFlag.group) != 0 {
-			return groupManager(projectSearchFlag.group).Search.Project(q)
+
+		if len(group) != 0 {
+			return groupManager(group).Search.Project(q)
 		}
 		return globalManager().Search.Project(q)
 	},
 }
 
-type projectSearchFlagStruct struct {
-	group string
-}
-
-var projectSearchFlag *projectSearchFlagStruct
-
 func init() {
-	projectSearchFlag = &projectSearchFlagStruct{}
-	projectSearchCmd.Flags().StringVarP(&projectSearchFlag.group, "group", "g", "", "filter by group")
+	projectSearchCmd.Flags().StringP("group", "g", "", "filter by group")
 }

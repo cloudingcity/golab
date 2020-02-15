@@ -10,18 +10,15 @@ var dependGOCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(1),
 	DisableFlagsInUseLine: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return groupManager(dependGOFlag.group).Depend.GO(args[0])
+		group, err := cmd.Flags().GetString("group")
+		if err != nil {
+			return err
+		}
+		return groupManager(group).Depend.GO(args[0])
 	},
 }
 
-type dependGOFlagStruct struct {
-	group string
-}
-
-var dependGOFlag *dependGOFlagStruct
-
 func init() {
-	dependGOFlag = &dependGOFlagStruct{}
-	dependGOCmd.Flags().StringVarP(&dependGOFlag.group, "group", "g", "", "group to inspect")
+	dependGOCmd.Flags().StringP("group", "g", "", "group to inspect")
 	dependGOCmd.MarkFlagRequired("group")
 }
