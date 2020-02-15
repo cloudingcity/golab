@@ -148,7 +148,7 @@ func (r *Render) Projects(projects []*gitlab.Project) {
 		row, h []string
 	)
 
-	h = []string{"id", "project", "url"}
+	h = []string{"pid", "project", "url"}
 
 	for _, project := range projects {
 		id := strconv.Itoa(project.ID)

@@ -144,7 +144,7 @@ func TestProjects(t *testing.T) {
 	New(buf).Projects(projects)
 
 	wants := []string{
-		"ID", "PROJECT", "URL",
+		"PID", "PROJECT", "URL",
 		"100", "pokemon/pikachu", "https://gitlab.com/pokemon/pikachu",
 		"200", "pokemon/pichu", "https://gitlab.com/pokemon/pichu",
 	}
