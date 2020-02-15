@@ -13,7 +13,3 @@ var ciLintCmd = &cobra.Command{
 		return globalManager().Validate.Lint(args[0])
 	},
 }
-
-func init() {
-	ciCmd.AddCommand(ciLintCmd)
-}

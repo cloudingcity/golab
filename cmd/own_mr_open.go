@@ -29,7 +29,3 @@ var ownMrOpenCmd = &cobra.Command{
 		return globalManager().MergeRequest.Open(pID, mrID)
 	},
 }
-
-func init() {
-	ownMrCmd.AddCommand(ownMrOpenCmd)
-}

@@ -15,7 +15,3 @@ var configListCmd = &cobra.Command{
 		config.List(os.Stdout)
 	},
 }
-
-func init() {
-	configCmd.AddCommand(configListCmd)
-}

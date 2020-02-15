@@ -32,7 +32,3 @@ var ownMrShowCmd = &cobra.Command{
 		return globalManager().MergeRequest.Show(pID, mrID)
 	},
 }
-
-func init() {
-	ownMrCmd.AddCommand(ownMrShowCmd)
-}
