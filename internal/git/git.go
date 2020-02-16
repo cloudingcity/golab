@@ -29,7 +29,7 @@ func Clone(repo, dir string) error {
 func CurrentRepo() string {
 	output, err := command("config", "--get", "remote.origin.url").Output()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("fatal: not a git repository (or any of the parent directories): .git")
 	}
 	return utils.ParseGitProject(string(output))
 }
