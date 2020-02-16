@@ -55,11 +55,11 @@ func initConfig() {
 }
 
 func currentProject() string {
-	url, err := gitconfig.OriginURL()
+	u, err := gitconfig.OriginURL()
 	if err != nil {
 		log.Fatal("not a git repository")
 	}
-	return utils.ParseGitProject(url)
+	return utils.ParseGitProject(u)
 }
 
 func gitlabClient() *gitlab.Client {
