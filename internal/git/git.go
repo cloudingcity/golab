@@ -1,6 +1,7 @@
 package git
 
 import (
+	"fmt"
 	"net/url"
 	"os"
 	"os/exec"
@@ -23,7 +24,7 @@ func New(url *url.URL) *Git {
 
 // Clone clone a repository form GitLab.
 func (g *Git) Clone(project, dir string) *Git {
-	repo := "git@" + g.URL.Host + ":" + project
+	repo := fmt.Sprintf("git@%s:%s.git", g.URL.Host, project)
 	args := []string{"clone", repo}
 
 	if len(dir) != 0 {

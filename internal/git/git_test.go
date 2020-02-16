@@ -12,5 +12,5 @@ func TestClone(t *testing.T) {
 	git := New(u)
 
 	git.Clone("foo/bar", "my-dir")
-	assert.Contains(t, git.String(), "git clone git@example.com:foo/bar my-dir")
+	assert.Contains(t, git.String(), "git clone git@example.com:foo/bar.git my-dir")
 }
