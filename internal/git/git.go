@@ -1,6 +1,7 @@
 package git
 
 import (
+	"bytes"
 	"log"
 	"os"
 	"os/exec"
@@ -10,6 +11,11 @@ import (
 
 var command = func(args ...string) *exec.Cmd {
 	return exec.Command("git", args...)
+}
+
+// Push update remote refs along with associated objects
+func Push(ref string) error {
+	return command("push", "--set-upstream", "origin", ref).Run()
 }
 
 // Clone clone a repository form GitLab.
@@ -32,4 +38,13 @@ func CurrentRepo() string {
 		log.Fatal("fatal: not a git repository (or any of the parent directories): .git")
 	}
 	return utils.ParseGitProject(string(output))
+}
+
+// CurrentBranch returns current branch.
+func CurrentBranch() string {
+	output, err := command("rev-parse", "--abbrev-ref", "HEAD").CombinedOutput()
+	if err != nil {
+		log.Fatal(string(output))
+	}
+	return string(bytes.Trim(output, "\n"))
 }

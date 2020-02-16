@@ -23,6 +23,11 @@ type GitlabValidate interface {
 	Lint(content string, options ...gitlab.OptionFunc) (*gitlab.LintResult, *gitlab.Response, error)
 }
 
+// GitlabProject is go-gitlab project service interface.
+type GitlabProject interface {
+	GetProject(pid interface{}, opt *gitlab.GetProjectOptions, options ...gitlab.OptionFunc) (*gitlab.Project, *gitlab.Response, error)
+}
+
 // GitlabGroup is go-gitlab group service interface.
 type GitlabGroup interface {
 	ListGroupProjects(gid interface{}, opt *gitlab.ListGroupProjectsOptions, options ...gitlab.OptionFunc) ([]*gitlab.Project, *gitlab.Response, error)
