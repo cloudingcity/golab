@@ -1,8 +1,11 @@
 package git
 
 import (
+	"log"
 	"os"
 	"os/exec"
+
+	"github.com/cloudingcity/golab/internal/utils"
 )
 
 var command = func(args ...string) *exec.Cmd {
@@ -20,4 +23,13 @@ func Clone(repo, dir string) error {
 	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
+}
+
+// OriginURL returns current repo.
+func CurrentRepo() string {
+	output, err := command("config", "--get", "remote.origin.url").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return utils.ParseGitProject(string(output))
 }
