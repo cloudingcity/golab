@@ -10,14 +10,14 @@ import (
 )
 
 type mergeRequestsService struct {
-	mr      contract.GitlabMergeRequests
-	out     io.Writer
-	openURL func(url string) error
+	gitlabMR contract.GitlabMergeRequests
+	out      io.Writer
+	openURL  func(url string) error
 }
 
 // List lists merge requests on a project.
 func (s *mergeRequestsService) List(opt *gitlab.ListMergeRequestsOptions) error {
-	mrs, _, err := s.mr.ListMergeRequests(opt)
+	mrs, _, err := s.gitlabMR.ListMergeRequests(opt)
 	if err != nil {
 		return err
 	}
@@ -28,7 +28,7 @@ func (s *mergeRequestsService) List(opt *gitlab.ListMergeRequestsOptions) error 
 
 // Open browse merge request in the default browser.
 func (s *mergeRequestsService) Open(pID, mrID int) error {
-	mr, _, err := s.mr.GetMergeRequest(pID, mrID, nil)
+	mr, _, err := s.gitlabMR.GetMergeRequest(pID, mrID, nil)
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func (s *mergeRequestsService) Open(pID, mrID int) error {
 
 // Show show a merge request on a project
 func (s *mergeRequestsService) Show(pID string, mrID int) error {
-	mr, _, err := s.mr.GetMergeRequest(pID, mrID, nil)
+	mr, _, err := s.gitlabMR.GetMergeRequest(pID, mrID, nil)
 	if err != nil {
 		return err
 	}

@@ -17,7 +17,7 @@ func TestMR(t *testing.T) {
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))
 
-	s := &searchService{project: project, search: mockGitlabSearch}
+	s := &searchService{project: project, gitlabSearch: mockGitlabSearch}
 	err := s.MR(query)
 
 	assert.Error(t, err)

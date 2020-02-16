@@ -9,13 +9,13 @@ import (
 )
 
 type searchService struct {
-	project string
-	search  contract.GitlabSearch
-	out     io.Writer
+	project      string
+	gitlabSearch contract.GitlabSearch
+	out          io.Writer
 }
 
 func (s *searchService) MR(query string) error {
-	mrs, _, err := s.search.MergeRequestsByProject(s.project, query, &gitlab.SearchOptions{})
+	mrs, _, err := s.gitlabSearch.MergeRequestsByProject(s.project, query, &gitlab.SearchOptions{})
 	if err != nil {
 		return err
 	}

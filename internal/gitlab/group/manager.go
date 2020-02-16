@@ -16,9 +16,9 @@ type Manager struct {
 func NewManager(c *gitlab.Client, group string, w io.Writer) *Manager {
 	m := &Manager{}
 	m.Search = &searchService{
-		group:  group,
-		search: c.Search,
-		out:    w,
+		group:        group,
+		gitlabSearch: c.Search,
+		out:          w,
 	}
 	m.Depend = &dependService{
 		group:          group,

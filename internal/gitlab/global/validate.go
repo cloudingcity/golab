@@ -9,8 +9,8 @@ import (
 )
 
 type validateService struct {
-	validate contract.GitlabValidate
-	out      io.Writer
+	gitlabValidate contract.GitlabValidate
+	out            io.Writer
 }
 
 // Lint validate .gitlab-ci.yml whether valid.
@@ -20,7 +20,7 @@ func (s *validateService) Lint(path string) error {
 		return err
 	}
 
-	result, _, err := s.validate.Lint(string(file))
+	result, _, err := s.gitlabValidate.Lint(string(file))
 	if err != nil {
 		return err
 	}

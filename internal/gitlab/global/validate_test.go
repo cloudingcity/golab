@@ -24,7 +24,7 @@ func TestLint(t *testing.T) {
 			Once().
 			Return(&gitlab.LintResult{}, &gitlab.Response{}, errors.New(""))
 
-		s := &validateService{validate: mockGitlabValidate}
+		s := &validateService{gitlabValidate: mockGitlabValidate}
 		dir, _ := os.Getwd()
 		s.Lint(dir + "/../../../test/.gitlab-ci.yml")
 

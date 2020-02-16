@@ -17,7 +17,7 @@ func TestList(t *testing.T) {
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, nil)
 
-	s := &mergeRequestsService{mr: mockGitlabMR, out: &bytes.Buffer{}}
+	s := &mergeRequestsService{gitlabMR: mockGitlabMR, out: &bytes.Buffer{}}
 	s.List(opt)
 
 	mockGitlabMR.AssertExpectations(t)
@@ -35,8 +35,8 @@ func TestOpen(t *testing.T) {
 		Return(&gitlab.MergeRequest{WebURL: "https://foo/bar"}, &gitlab.Response{}, nil)
 
 	s := &mergeRequestsService{
-		mr:  mockGitlabMR,
-		out: stdout,
+		gitlabMR: mockGitlabMR,
+		out:      stdout,
 		openURL: func(url string) error {
 			openURL = url
 			return nil
@@ -57,7 +57,7 @@ func TestShow(t *testing.T) {
 		Once().
 		Return(&gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))
 
-	s := &mergeRequestsService{mr: mockGitlabMR, out: &bytes.Buffer{}}
+	s := &mergeRequestsService{gitlabMR: mockGitlabMR, out: &bytes.Buffer{}}
 	err := s.Show(pID, mrID)
 
 	assert.Error(t, err)

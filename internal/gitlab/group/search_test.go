@@ -17,7 +17,7 @@ func TestMR(t *testing.T) {
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))
 
-	s := &searchService{group: group, search: mockGitlabSearch}
+	s := &searchService{group: group, gitlabSearch: mockGitlabSearch}
 	err := s.MR(query)
 
 	assert.Error(t, err)
@@ -32,7 +32,7 @@ func TestProject(t *testing.T) {
 		Once().
 		Return([]*gitlab.Project{}, &gitlab.Response{}, errors.New(""))
 
-	s := &searchService{group: group, search: mockGitlabSearch}
+	s := &searchService{group: group, gitlabSearch: mockGitlabSearch}
 	err := s.Project(query)
 
 	assert.Error(t, err)

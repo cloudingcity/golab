@@ -18,17 +18,17 @@ type Manager struct {
 func NewManager(c *gitlab.Client, w io.Writer) *Manager {
 	m := &Manager{}
 	m.MergeRequest = &mergeRequestsService{
-		mr:      c.MergeRequests,
-		out:     w,
-		openURL: browser.OpenURL,
+		gitlabMR: c.MergeRequests,
+		out:      w,
+		openURL:  browser.OpenURL,
 	}
 	m.Validate = &validateService{
-		validate: c.Validate,
-		out:      w,
+		gitlabValidate: c.Validate,
+		out:            w,
 	}
 	m.Search = &searchService{
-		search: c.Search,
-		out:    w,
+		gitlabSearch: c.Search,
+		out:          w,
 	}
 
 	return m

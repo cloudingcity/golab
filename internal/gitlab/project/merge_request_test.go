@@ -19,7 +19,7 @@ func TestList(t *testing.T) {
 		Once().
 		Return([]*gitlab.MergeRequest{}, &gitlab.Response{}, nil)
 
-	s := &mergeRequestsService{project: project, mr: mockGitlabMR, out: &bytes.Buffer{}}
+	s := &mergeRequestsService{project: project, gitlabMR: mockGitlabMR, out: &bytes.Buffer{}}
 	s.List(opt)
 
 	mockGitlabMR.AssertExpectations(t)
@@ -55,7 +55,7 @@ func TestShow(t *testing.T) {
 		Once().
 		Return(&gitlab.MergeRequest{}, &gitlab.Response{}, errors.New(""))
 
-	s := &mergeRequestsService{project: project, mr: mockGitlabMR, out: &bytes.Buffer{}}
+	s := &mergeRequestsService{project: project, gitlabMR: mockGitlabMR, out: &bytes.Buffer{}}
 	err := s.Show(mrID)
 
 	assert.Error(t, err)
