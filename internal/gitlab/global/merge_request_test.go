@@ -24,8 +24,10 @@ func TestList(t *testing.T) {
 }
 
 func TestOpen(t *testing.T) {
-	var got string
-	pID := "123"
+	var openURL string
+	stdout := &bytes.Buffer{}
+
+	pID := 123
 	mrID := 456
 	mockGitlabMR := &mocks.GitlabMergeRequests{}
 	mockGitlabMR.On("GetMergeRequest", pID, mrID, (*gitlab.GetMergeRequestsOptions)(nil)).
@@ -33,15 +35,17 @@ func TestOpen(t *testing.T) {
 		Return(&gitlab.MergeRequest{WebURL: "https://foo/bar"}, &gitlab.Response{}, nil)
 
 	s := &mergeRequestsService{
-		mr: mockGitlabMR,
+		mr:  mockGitlabMR,
+		out: stdout,
 		openURL: func(url string) error {
-			got = url
+			openURL = url
 			return nil
 		},
 	}
 	s.Open(pID, mrID)
 
-	assert.Equal(t, "https://foo/bar", got)
+	assert.Equal(t, "Opening https://foo/bar in your browser\n", stdout.String())
+	assert.Equal(t, "https://foo/bar", openURL)
 	mockGitlabMR.AssertExpectations(t)
 }
 

@@ -1,9 +1,11 @@
 package project
 
 import (
+	"fmt"
 	"io"
 	"net/url"
 	"path"
+	"strconv"
 
 	"github.com/cloudingcity/golab/internal/gitlab/contract"
 	"github.com/cloudingcity/golab/internal/gitlab/render"
@@ -30,10 +32,11 @@ func (s *mergeRequestsService) List(opt *gitlab.ListProjectMergeRequestsOptions)
 }
 
 // Open browse merge request in the default browser.
-func (s *mergeRequestsService) Open(mrID string) error {
+func (s *mergeRequestsService) Open(mrID int) error {
 	u := *s.baseURL
-	u.Path = path.Join(s.project, "merge_requests", mrID)
+	u.Path = path.Join(s.project, "merge_requests", strconv.Itoa(mrID))
 
+	fmt.Fprintf(s.out, "Opening %s in your browser\n", u.String())
 	return s.openURL(u.String())
 }
 

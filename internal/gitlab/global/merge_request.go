@@ -1,6 +1,7 @@
 package global
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/cloudingcity/golab/internal/gitlab/contract"
@@ -26,12 +27,13 @@ func (s *mergeRequestsService) List(opt *gitlab.ListMergeRequestsOptions) error 
 }
 
 // Open browse merge request in the default browser.
-func (s *mergeRequestsService) Open(pID string, mrID int) error {
+func (s *mergeRequestsService) Open(pID, mrID int) error {
 	mr, _, err := s.mr.GetMergeRequest(pID, mrID, nil)
 	if err != nil {
 		return err
 	}
 
+	fmt.Fprintf(s.out, "Opening %s in your browser\n", mr.WebURL)
 	return s.openURL(mr.WebURL)
 }
 

@@ -26,7 +26,8 @@ func TestList(t *testing.T) {
 }
 
 func TestOpen(t *testing.T) {
-	var got string
+	var openURL string
+	stdout := &bytes.Buffer{}
 
 	project := "foo/bar"
 	baseURL, _ := url.Parse("https://gitlab.com")
@@ -34,14 +35,16 @@ func TestOpen(t *testing.T) {
 	s := &mergeRequestsService{
 		project: project,
 		baseURL: baseURL,
+		out:     stdout,
 		openURL: func(url string) error {
-			got = url
+			openURL = url
 			return nil
 		},
 	}
-	s.Open("123")
+	s.Open(123)
 
-	assert.Equal(t, "https://gitlab.com/foo/bar/merge_requests/123", got)
+	assert.Equal(t, "Opening https://gitlab.com/foo/bar/merge_requests/123 in your browser\n", stdout.String())
+	assert.Equal(t, "https://gitlab.com/foo/bar/merge_requests/123", openURL)
 }
 
 func TestShow(t *testing.T) {
