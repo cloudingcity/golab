@@ -25,7 +25,7 @@ func Clone(repo, dir string) error {
 	return cmd.Run()
 }
 
-// OriginURL returns current repo.
+// CurrentRepo returns current repo.
 func CurrentRepo() string {
 	output, err := command("config", "--get", "remote.origin.url").Output()
 	if err != nil {
