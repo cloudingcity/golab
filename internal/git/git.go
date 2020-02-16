@@ -1,50 +1,35 @@
 package git
 
 import (
-	"fmt"
-	"net/url"
+	"log"
 	"os"
 	"os/exec"
+
+	"github.com/cloudingcity/golab/internal/utils"
 )
 
-// Git is a command struct.
-type Git struct {
-	cmd *exec.Cmd
-	URL *url.URL
-}
-
-// New returns an initialized Git instance.
-func New(url *url.URL) *Git {
-	cmd := exec.Command("git")
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return &Git{cmd: cmd, URL: url}
+var command = func(args ...string) *exec.Cmd {
+	return exec.Command("git", args...)
 }
 
 // Clone clone a repository form GitLab.
-func (g *Git) Clone(project, dir string) *Git {
-	repo := fmt.Sprintf("git@%s:%s.git", g.URL.Host, project)
+func Clone(repo, dir string) error {
 	args := []string{"clone", repo}
-
 	if len(dir) != 0 {
 		args = append(args, dir)
 	}
 
-	g.setArgs(args)
-	return g
+	cmd := command(args...)
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
 
-// Run execute command.
-func (g *Git) Run() {
-	g.cmd.Run()
-}
-
-// String returns a human-readable description of command.
-func (g *Git) String() string {
-	return g.cmd.String()
-}
-
-func (g *Git) setArgs(args []string) {
-	g.cmd.Args = append([]string{g.cmd.Path}, args...)
+// OriginURL returns current repo.
+func CurrentRepo() string {
+	output, err := command("config", "--get", "remote.origin.url").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return utils.ParseGitProject(string(output))
 }
