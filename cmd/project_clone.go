@@ -1,18 +1,30 @@
 package cmd
 
 import (
+	"fmt"
+	"log"
+	"net/url"
+
+	"github.com/cloudingcity/golab/internal/git"
 	"github.com/spf13/cobra"
 )
 
 var clone = func(cmd *cobra.Command, args []string) {
-	var dir string
+	var dir, project string
 
-	repo := args[0]
+	project = args[0]
 	if len(args) > 1 {
 		dir = args[1]
 	}
 
-	gitCmd().Clone(repo, dir).Run()
+	host, err := url.Parse(config.Get("host"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	repo := fmt.Sprintf("git@%s:%s.git", host.Host, project)
+
+	git.Clone(repo, dir)
 }
 
 var projectCloneCmd = &cobra.Command{
