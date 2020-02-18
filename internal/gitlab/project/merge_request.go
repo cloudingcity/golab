@@ -66,7 +66,7 @@ func (s *mergeRequestsService) Create() error {
 		return fmt.Errorf("must be on a branch named differently than %q", defaultBranch)
 	}
 
-	if err = git.Push(currentBranch); err != nil {
+	if err := git.Push(currentBranch); err != nil {
 		return err
 	}
 
