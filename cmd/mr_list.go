@@ -31,8 +31,6 @@ var mrListCmd = &cobra.Command{
 
 		if review {
 			opt.Scope = gitlab.String("assigned_to_me")
-		} else {
-			opt.Scope = gitlab.String("created_by_me")
 		}
 
 		return projectManager(nil).MergeRequest.List(opt)
