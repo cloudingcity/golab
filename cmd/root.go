@@ -16,19 +16,24 @@ import (
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
-	Use:   "golab",
-	Short: "A CLI tool for gitlab",
+	Use:           "golab",
+	Short:         "A CLI tool for gitlab",
+	SilenceErrors: true,
+	SilenceUsage:  true,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
+	if cmd, err := rootCmd.ExecuteC(); err != nil {
+		handleError(cmd, err)
 	}
 }
 
 func init() {
 	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
+	rootCmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
+		return &flagError{err}
+	})
 	cobra.OnInitialize(initConfig)
 
 	log.SetFlags(0)
