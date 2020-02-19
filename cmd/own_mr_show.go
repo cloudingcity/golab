@@ -1,10 +1,10 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
