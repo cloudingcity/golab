@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -13,16 +14,16 @@ var ownMrShowCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return errors.New("missing PID")
-		}
-		if len(args) < 2 {
-			return errors.New("missing MRID")
+			return &flagError{errors.New("missing MRID")}
 		}
 		if _, err := strconv.Atoi(args[0]); err != nil {
-			return errors.Errorf("invalid PID %q", args[0])
+			return &flagError{fmt.Errorf("invalid MRID %q", args[0])}
+		}
+		if len(args) < 2 {
+			return &flagError{errors.New("missing PID")}
 		}
 		if _, err := strconv.Atoi(args[1]); err != nil {
-			return errors.Errorf("invalid MRID %q", args[1])
+			return &flagError{fmt.Errorf("invalid PID %q", args[0])}
 		}
 		return nil
 	},

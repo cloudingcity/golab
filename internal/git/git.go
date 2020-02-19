@@ -27,6 +27,7 @@ func Clone(repo, dir string) error {
 
 	cmd := command(args...)
 	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
 
 	return cmd.Run()
 }
