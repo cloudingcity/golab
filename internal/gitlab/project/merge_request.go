@@ -67,7 +67,7 @@ func (s *mergeRequestsService) Create() error {
 	}
 
 	if err := git.Push(currentBranch); err != nil {
-		return err
+		return fmt.Errorf("failed to push branch %q (non-fast-forward)", currentBranch)
 	}
 
 	u := *s.baseURL
@@ -76,6 +76,6 @@ func (s *mergeRequestsService) Create() error {
 	q.Set("merge_request[source_branch]", currentBranch)
 	u.RawQuery = q.Encode()
 
-	fmt.Fprintf(s.out, "Opening %s in your browser\n", u.String())
+	fmt.Fprintf(s.out, "\nOpening %s in your browser\n", u.String())
 	return s.openURL(u.String())
 }

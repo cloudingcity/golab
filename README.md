@@ -83,6 +83,18 @@ $ golab clone pokemon/eevee
 # git clone git@gitlab.com:pokemon/eevee.git
 ```
 
+### Create a merge request
+
+1. Push local branch to remote repository
+2. Opening merge request page in browser
+
+```shell script
+$ golab mr create
+Branch 'foo' set up to track remote branch 'foo' from 'origin'.
+
+Opening https://example.com/pokemon/trainer/merge_requests/new?merge_request%5Bsource_branch%5D=foo in your browser
+```
+
 ### Show current repository merge requests
 ```shell script
 $ golab mr list

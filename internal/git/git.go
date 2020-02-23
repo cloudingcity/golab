@@ -15,7 +15,9 @@ var command = func(args ...string) *exec.Cmd {
 
 // Push update remote refs along with associated objects
 func Push(ref string) error {
-	return command("push", "--set-upstream", "origin", ref).Run()
+	cmd := command("push", "--set-upstream", "origin", ref)
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
 }
 
 // Clone clone a repository form GitLab.
