@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	conf "github.com/cloudingcity/golab/internal/config"
 	"github.com/cloudingcity/golab/internal/git"
@@ -59,7 +61,8 @@ func initConfig() {
 }
 
 func gitlabClient() *gitlab.Client {
-	c := gitlab.NewClient(nil, config.Get("token"))
+	client := &http.Client{Timeout: 1000 * time.Second}
+	c := gitlab.NewClient(client, config.Get("token"))
 	if err := c.SetBaseURL(config.Get("host")); err != nil {
 		log.Fatal(err)
 		return nil
