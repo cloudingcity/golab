@@ -62,7 +62,7 @@ func initConfig() {
 }
 
 func gitlabClient() *gitlab.Client {
-	client := &http.Client{Timeout: 1000 * time.Second}
+	client := &http.Client{Timeout: 1 * time.Second}
 	c := gitlab.NewClient(client, config.Get("token"))
 	if err := c.SetBaseURL(config.Get("host")); err != nil {
 		log.Fatal(err)
