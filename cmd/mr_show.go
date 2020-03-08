@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	errs "github.com/cloudingcity/golab/internal/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -14,10 +15,10 @@ var mrShowCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &flagError{errors.New("missing MRID")}
+			return &errs.ArgError{Err: errors.New("missing MRID")}
 		}
 		if _, err := strconv.Atoi(args[0]); err != nil {
-			return &flagError{fmt.Errorf("invalid MRID %q", args[0])}
+			return &errs.ArgError{Err: fmt.Errorf("invalid MRID %q", args[0])}
 		}
 		return nil
 	},

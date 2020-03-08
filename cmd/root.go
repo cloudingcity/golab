@@ -8,6 +8,7 @@ import (
 	"time"
 
 	conf "github.com/cloudingcity/golab/internal/config"
+	"github.com/cloudingcity/golab/internal/errors"
 	"github.com/cloudingcity/golab/internal/git"
 	"github.com/cloudingcity/golab/internal/gitlab/global"
 	"github.com/cloudingcity/golab/internal/gitlab/group"
@@ -27,14 +28,14 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 func Execute() {
 	if cmd, err := rootCmd.ExecuteC(); err != nil {
-		handleError(cmd, err)
+		errors.Handle(cmd, err)
 	}
 }
 
 func init() {
 	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
 	rootCmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
-		return &flagError{err}
+		return &errors.FlagError{Err: err}
 	})
 	cobra.OnInitialize(initConfig)
 

@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	errs "github.com/cloudingcity/golab/internal/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +12,7 @@ var projectSearchCmd = &cobra.Command{
 	Short: "Search projects",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &flagError{errors.New("requires a query")}
+			return &errs.ArgError{Err: errors.New("requires a query")}
 		}
 		return nil
 	},

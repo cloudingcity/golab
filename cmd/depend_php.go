@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	errs "github.com/cloudingcity/golab/internal/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +12,7 @@ var dependPHPCmd = &cobra.Command{
 	Short: "List composer package (vendor/name) dependency",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &flagError{errors.New("requires a package")}
+			return &errs.ArgError{Err: errors.New("requires a package")}
 		}
 		return nil
 	},
