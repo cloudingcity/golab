@@ -12,7 +12,7 @@ var mrSearchCmd = &cobra.Command{
 	Short: "Search merge requests",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &errs.FlagError{Err: errors.New("requires a query")}
+			return &errs.ArgError{Err: errors.New("requires a query")}
 		}
 		return nil
 	},

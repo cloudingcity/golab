@@ -12,7 +12,7 @@ var dependPHPCmd = &cobra.Command{
 	Short: "List composer package (vendor/name) dependency",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &errs.FlagError{Err: errors.New("requires a package")}
+			return &errs.ArgError{Err: errors.New("requires a package")}
 		}
 		return nil
 	},

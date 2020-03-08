@@ -12,7 +12,7 @@ var dependGOCmd = &cobra.Command{
 	Short: "List go module package (example.com/hello) dependency",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &errs.FlagError{Err: errors.New("requires a package")}
+			return &errs.ArgError{Err: errors.New("requires a package")}
 		}
 		return nil
 	},

@@ -12,7 +12,7 @@ var ciLintCmd = &cobra.Command{
 	Short: "Validate the .gitlab-ci.yml",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &errs.FlagError{Err: errors.New("requires a file")}
+			return &errs.ArgError{Err: errors.New("requires a file")}
 		}
 		return nil
 	},

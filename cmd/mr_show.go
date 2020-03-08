@@ -15,10 +15,10 @@ var mrShowCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &errs.FlagError{Err: errors.New("missing MRID")}
+			return &errs.ArgError{Err: errors.New("missing MRID")}
 		}
 		if _, err := strconv.Atoi(args[0]); err != nil {
-			return &errs.FlagError{Err: fmt.Errorf("invalid MRID %q", args[0])}
+			return &errs.ArgError{Err: fmt.Errorf("invalid MRID %q", args[0])}
 		}
 		return nil
 	},
