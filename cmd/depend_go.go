@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	errs "github.com/cloudingcity/golab/internal/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +12,7 @@ var dependGOCmd = &cobra.Command{
 	Short: "List go module package (example.com/hello) dependency",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &flagError{errors.New("requires a package")}
+			return &errs.FlagError{Err: errors.New("requires a package")}
 		}
 		return nil
 	},

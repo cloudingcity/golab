@@ -1,4 +1,4 @@
-package cmd
+package errors
 
 import (
 	"errors"
@@ -8,22 +8,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type flagError struct {
+type FlagError struct {
 	Err error
 }
 
-func (e *flagError) Error() string {
+func (e *FlagError) Error() string {
 	return e.Err.Error()
 }
 
-func (e *flagError) Unwrap() error {
+func (e *FlagError) Unwrap() error {
 	return e.Err
 }
 
-func handleError(cmd *cobra.Command, err error) {
+func Handle(cmd *cobra.Command, err error) {
 	fmt.Println(err)
 
-	var flagError *flagError
+	var flagError *FlagError
 	if errors.As(err, &flagError) || isUnknownCommand(err) || isDefaultFlagError(err) {
 		fmt.Println()
 		fmt.Println(cmd.UsageString())
@@ -31,7 +31,7 @@ func handleError(cmd *cobra.Command, err error) {
 }
 
 func isUnknownCommand(err error) bool {
-	return strings.HasPrefix(err.Error(), "unknown command ")
+	return strings.HasPrefix(err.Error(), "unknown command")
 }
 
 func isDefaultFlagError(err error) bool {

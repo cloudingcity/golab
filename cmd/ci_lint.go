@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	errs "github.com/cloudingcity/golab/internal/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +12,7 @@ var ciLintCmd = &cobra.Command{
 	Short: "Validate the .gitlab-ci.yml",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return &flagError{errors.New("requires a file")}
+			return &errs.FlagError{Err: errors.New("requires a file")}
 		}
 		return nil
 	},
