@@ -72,8 +72,11 @@ func (s *mergeRequestsService) Create() error {
 
 	u := *s.baseURL
 	u.Path = path.Join(s.project, "merge_requests", "new")
-	q := make(url.Values)
+	q := u.Query()
 	q.Set("merge_request[source_branch]", currentBranch)
+	q.Set("merge_request[target_branch]", defaultBranch)
+	q.Set("merge_request[source_project_id]", strconv.Itoa(project.ID))
+	q.Set("merge_request[target_project_id]", strconv.Itoa(project.ID))
 	u.RawQuery = q.Encode()
 
 	fmt.Fprintf(s.out, "\nOpening %s in your browser\n", u.String())
